@@ -1,8 +1,10 @@
-/*!
- * Start Bootstrap - Blog Post (http://startbootstrap.com/template-overviews/blog-post)
- * Copyright 2013-2017 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-blog-post/blob/master/LICENSE)
- */
+.truncate-text{
+	overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    display: block;
+}
 
 body {
     padding-top: 54px;
@@ -13,3 +15,5 @@ body {
         padding-top: 56px;
     }
 }
+
+
