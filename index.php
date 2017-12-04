@@ -136,6 +136,7 @@
                   <option value="6">6</option>                     
                 </select>
               </div>
+              <hr>
               <input type="submit" class="btn btn-default btn-block" value="Tìm Kiếm">
             </form>
           </div>
@@ -253,8 +254,6 @@
 
     <script type="text/javascript">
 
-      var a = 0;
-
       $('.price').each(function( index ) {
 
         var priceR = parseInt($(this).text()).toString();;
@@ -278,7 +277,7 @@
     $('#price').bind('change', function(){
       var price = $('#price').val();
 
-      $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ');
+      $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ / Ngày');
 
     });
 

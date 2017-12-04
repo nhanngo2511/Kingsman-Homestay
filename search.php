@@ -36,8 +36,13 @@
   include("connection.php");
 
   $category = @$_GET["category"];
+  
   $checkindate = @$_GET["checkindate"];
+  $formatcheckindate = date_format(date_create($checkindate),"Y-m-d");
+
   $checkoutdate = @$_GET["checkoutdate"];
+  $formatcheckoutdate = date_format(date_create($checkoutdate),"Y-m-d");
+
   $price = @$_GET["price"];
   $members = @$_GET["members"];
 
@@ -45,24 +50,36 @@
   $kqlenhLP = mysqli_query($conn,$lenhLP);
 
 
-$lenhR = "select id from rooms";
-  $kqlenhR = mysqli_query($conn,$lenhR);
-  $tongsodong = mysqli_num_rows($kqlenhR);
+  // paging
   $sodong = 2;
-  $sotrang = ceil($tongsodong / $sodong);
   if(!isset($_GET["p"]))
     $p = 1;
   else
     $p = $_GET["p"];
   $x = ($p - 1)*$sodong;
+
+
   $lenh1 = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name AS ImageName
-FROM rooms
+  FROM rooms
   JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS Images ON rooms.ID = images.RoomID
-    JOIN categories ON rooms.ID = categories.ID limit ".$x.",".$sodong;
+  JOIN orders on orders.RoomID = rooms.ID
+  WHERE 
+  rooms.Status = 1 AND
+  rooms.NumberOfPeople >= " .$members." AND
+  rooms.CategoryID = " .$category." AND 
+  rooms.Price <= " .$price." AND
+  ((\"$formatcheckindate\" < orders.CheckInDate AND \"$formatcheckoutdate\" < orders.CheckInDate) OR (\"$formatcheckindate\" > orders.CheckOutDate AND \"$formatcheckoutdate\" > orders.CheckOutDate))
+  ORDER BY rooms.Price limit ".$x.",".$sodong;
+
   $kq1 = mysqli_query($conn,$lenh1);
 
+  // paging
+  $tongsodong = mysqli_num_rows($kq1);
+  $sotrang = ceil($tongsodong / $sodong);
 
   ?>
+
+
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
    <div class="container">
@@ -152,7 +169,9 @@ FROM rooms
               ?>
 
             </select>
+
           </div>
+          <hr>
           <input type="submit" class="btn btn-default btn-block" value="Tìm Kiếm">
         </form>
       </div>
@@ -169,35 +188,32 @@ FROM rooms
     <div class="row">
 
       <?php
-          while($rowP = mysqli_fetch_row($kq1))
-          {
-            ?>
-            <div class="col-lg-4 col-md-6 mb-4">
-              <div class="card h-100">
-                <a href="<?php echo "details.php?id=" .$rowP[0]; ?>"><img style =" height: 130px" class="card-img-top" src="Images/<?php echo $rowP[4]; ?>" alt=""></a>
-                <div class="card-body" style="text-align: center;">
-                  <h4 class="card-title">
-                    <a href="<?php echo "details.php?id=" .$rowP[0]; ?>"><?php echo $rowP[1]; ?></a>
-                  </h4>
-                </div>
-                <div class="truncate-text" style="text-align: center; margin-left: 10px; margin-right: 10px; height: 100px">
-                  <p>
-                    <?php echo $rowP[2]; ?>
-                  </p>
-                </div>
-                <div class="card-footer">
-                  <h6>Giá: <span class="price"> <?php echo $rowP[3]; ?></span></h6> 
-                  <hr>
-                  <a class='btn btn-success btn-block' href="details.php?id<?php echo $rowP[0]; ?>">Xem chi tiết</a>
-                  <!-- <input type='submit' name='add_to_cart' class='btn btn-success' value='Thêm vào giỏ hàng'>  -->
-                </div>
+
+      if (mysqli_num_rows($kq1) > 0) {
+        while($rowP = mysqli_fetch_array($kq1))
+        {
+          ?>
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="<?php echo "details.php?id=" .$rowP[0]; ?>"><img style =" height: 130px" class="card-img-top" src="Images/<?php echo $rowP[4]; ?>" alt=""></a>
+              <div class="card-body" style="text-align: center;">
+                <h4 class="card-title">
+                  <a href="<?php echo "details.php?id=" .$rowP[0]; ?>"><?php echo $rowP[1]; ?></a>
+                </h4>
+              </div>
+              <div class="truncate-text" style="text-align: center; margin-left: 10px; margin-right: 10px; height: 100px">
+                <p>
+                  <?php echo $rowP[2]; ?>
+                </p>
+              </div>
+              <div class="card-footer">
+                <h6>Giá: <span class="price"> <?php echo $rowP[3]; ?></span></h6> 
+                <hr>
+                <a class='btn btn-success btn-block' href="details.php?id<?php echo $rowP[0]; ?>">Xem chi tiết</a>
+                <!-- <input type='submit' name='add_to_cart' class='btn btn-success' value='Thêm vào giỏ hàng'>  -->
               </div>
             </div>
-            <?php
-          }
-          ?>
-
-          
+          </div> 
         </div>
         <hr style="clear: both;">
 
@@ -219,14 +235,26 @@ FROM rooms
 
           </ul>
         </nav>
+        <?php
+      }
+    }else{
+     echo "<h3>Không tìm thấy dữ liệu phù hợp.<h3>";
+   }
 
-    </div>
-    <!-- /.row -->
 
-  </div>
-  <!-- /.col-lg-9 -->
-  <!-- Sidebar Widgets Column -->
-  <!-- /.row -->
+
+   ?>
+
+
+   
+
+ </div>
+ <!-- /.row -->
+
+</div>
+<!-- /.col-lg-9 -->
+<!-- Sidebar Widgets Column -->
+<!-- /.row -->
 
 </div>
 <!-- /.container -->
@@ -250,17 +278,27 @@ FROM rooms
 
 <script type="text/javascript">
 
- var price = $('#price').val();
- $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ');
+  $('.price').each(function( index ) {
 
- $('#datestart').datepicker();
- $('#dateend').datepicker();
+    var priceR = parseInt($(this).text()).toString();;
+
+    var formatprice = FormatNumber(priceR) + ' VNĐ / Ngày';
+
+    $(this).text(formatprice);
+
+  });
+
+  var price = $('#price').val();
+  $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ / Ngày');
+
+  $('#datestart').datepicker();
+  $('#dateend').datepicker();
 
     // Without JQuery
     $('#price').bind('change', function(){
       var price = $('#price').val();
 
-      $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ');
+      $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ / Ngày');
 
     });
 
