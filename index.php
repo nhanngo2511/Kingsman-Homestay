@@ -38,8 +38,6 @@
 
   include("connection.php");
 
-  $cate = @$_GET["category"];
-
 
   $lenhLP = 'select id, name from categories';
   $kqlenhLP = mysqli_query($conn,$lenhLP);
@@ -107,9 +105,7 @@
                   while($rowLP = mysqli_fetch_row($kqlenhLP))
                   {
 
-                    if ($rowLP[0] == $cate) {
-                      echo "<option value=$rowLP[0] selected>$rowLP[1]</option>";
-                    }else
+                   
                     echo "<option value=$rowLP[0]>$rowLP[1]</option>";
 
                   }
@@ -118,11 +114,11 @@
               </div>
               <div class="form-group">
                 <label for="">Ngày đến:</label>
-                <input name="datestart" type="text" class="form-control" id="datestart">
+                <input name="checkindate" type="text" class="form-control" id="datestart">
               </div>
               <div class="form-group">
                 <label for="">Ngày đi:</label>
-                <input name="dateend" type="text" class="form-control" id="dateend">
+                <input name="checkoutdate" type="text" class="form-control" id="dateend">
               </div>
               <div class="form-group">
                 <label for="">Giá: <span id="preview-price"></span></label>
@@ -140,7 +136,7 @@
                   <option value="6">6</option>                     
                 </select>
               </div>
-              <button type="submit" class="btn btn-default">Tìm kiếm</button>
+              <input type="submit" class="btn btn-default btn-block" value="Tìm Kiếm">
             </form>
           </div>
         </div>
@@ -198,7 +194,7 @@
                   <h6>Giá: <span class="price"> <?php echo $rowP[3]; ?></span></h6> 
                   <hr>
                   <a class='btn btn-success btn-block' href="details.php?id<?php echo $rowP[0]; ?>">Xem chi tiết</a>
-                    <!-- <input type='submit' name='add_to_cart' class='btn btn-success' value='Thêm vào giỏ hàng'>  -->
+                  <!-- <input type='submit' name='add_to_cart' class='btn btn-success' value='Thêm vào giỏ hàng'>  -->
                 </div>
               </div>
             </div>
@@ -210,24 +206,24 @@
         </div>
         <hr style="clear: both;">
 
-          <nav aria-label="Page navigation example">
-            <ul class="pagination" style="margin-left: 300px;">
-              <?php
-              for($i=1; $i<=$sotrang; $i++)
+        <nav aria-label="Page navigation example">
+          <ul class="pagination" style="margin-left: 300px;">
+            <?php
+            for($i=1; $i<=$sotrang; $i++)
+            {
+              if($i==$p)
+                echo "<li class='page-item active'> <a class='page-link' href='index.php?p=$i'>$i</a></li>";
+              else
               {
-                if($i==$p)
-                  echo "<li class='page-item active'> <a class='page-link' href='index.php?p=$i'>$i</a></li>";
-                else
-                {
-                  ?>
-                  <li class="page-item"> <a class="page-link" href="index.php?p=<?php echo $i;    ?>"><?php echo $i;    ?></a></li>
-                  <?php
-                }
+                ?>
+                <li class="page-item"> <a class="page-link" href="index.php?p=<?php echo $i;    ?>"><?php echo $i;    ?></a></li>
+                <?php
               }
-              ?>
+            }
+            ?>
 
-            </ul>
-          </nav>
+          </ul>
+        </nav>
         <!-- /.row -->
 
       </div>
