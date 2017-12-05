@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-
+  <link rel="icon" href="Images/logo.ico">
   <title>Tìm kiếm</title>
   <!-- Slider -->
 
@@ -34,14 +34,38 @@
   <?php 
 
   include("connection.php");
+  include("session_datechecking.php");
+  DateCheckingSession();
+
+  // if (!empty($_SESSION["datechecking"])) {
+  //   // $checkindate = $_SESSION["datechecking"]["checkindate"];
+  //   // $checkoutdate = $_SESSION["datechecking"]["checkoutdate"];
+
+  //   // echo  $checkindate ;
+  //    echo  "OK" ;
+  // }
+
+
+
+  $currentURL = $_SERVER["REQUEST_URI"];
+
 
   $category = @$_GET["category"];
-  
-  $checkindate = @$_GET["checkindate"];
-  $formatcheckindate = date_format(date_create($checkindate),"Y-m-d");
 
-  $checkoutdate = @$_GET["checkoutdate"];
-  $formatcheckoutdate = date_format(date_create($checkoutdate),"Y-m-d");
+  $checkindate = $_GET["checkindate"];
+  $formatcheckindate ="";
+  if ($checkindate != null) {
+    $formatcheckindate = date_format(date_create($checkindate),"Y-m-d");
+  }
+  
+
+  $checkoutdate = $_GET["checkoutdate"];
+  $formatcheckoutdate="";
+  if ($checkoutdate != null) {
+    $formatcheckoutdate = date_format(date_create($checkoutdate),"Y-m-d");
+  }
+
+  
 
   $price = @$_GET["price"];
   $members = @$_GET["members"];
@@ -51,31 +75,43 @@
 
 
   // paging
-  $sodong = 2;
+  $sodong = 1;
   if(!isset($_GET["p"]))
     $p = 1;
   else
     $p = $_GET["p"];
   $x = ($p - 1)*$sodong;
 
+  $lenhtotalrows = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name AS ImageName
+  FROM rooms
+  JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS Images ON rooms.ID = images.RoomID
+  JOIN orders on orders.RoomID = rooms.ID
+  WHERE rooms.Status = 1 AND
+  rooms.NumberOfPeople >= " .$members." AND
+  rooms.CategoryID like \"%$category%\" AND 
+  rooms.Price >= " .$price." AND
+  ((\"$formatcheckindate\" < orders.CheckInDate AND \"$formatcheckoutdate\" < orders.CheckInDate) OR (\"$formatcheckindate\" > orders.CheckOutDate AND \"$formatcheckoutdate\" > orders.CheckOutDate))";
+
+    $kqlenhtotalrows = mysqli_query($conn,$lenhtotalrows);
+
+    echo   $lenhtotalrows;
+
+  $tongsodong = mysqli_num_rows($kqlenhtotalrows);
+  $sotrang = ceil($tongsodong / $sodong);
+
 
   $lenh1 = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name AS ImageName
   FROM rooms
   JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS Images ON rooms.ID = images.RoomID
   JOIN orders on orders.RoomID = rooms.ID
-  WHERE 
-  rooms.Status = 1 AND
+  WHERE rooms.Status = 1 AND
   rooms.NumberOfPeople >= " .$members." AND
-  rooms.CategoryID = " .$category." AND 
-  rooms.Price <= " .$price." AND
+  rooms.CategoryID like \"%$category%\" AND 
+  rooms.Price >= " .$price." AND
   ((\"$formatcheckindate\" < orders.CheckInDate AND \"$formatcheckoutdate\" < orders.CheckInDate) OR (\"$formatcheckindate\" > orders.CheckOutDate AND \"$formatcheckoutdate\" > orders.CheckOutDate))
   ORDER BY rooms.Price limit ".$x.",".$sodong;
 
   $kq1 = mysqli_query($conn,$lenh1);
-
-  // paging
-  $tongsodong = mysqli_num_rows($kq1);
-  $sotrang = ceil($tongsodong / $sodong);
 
   ?>
 
@@ -139,11 +175,11 @@
             </div>
             <div class="form-group">
               <label for="">Ngày đến:</label>
-              <input name="checkindate" type="text" class="form-control" id="datestart" value="<?php echo $checkindate; ?>">
+              <input name="checkindate" type="date" class="form-control" id="datestart" value="<?php echo $checkindate; ?>">
             </div>
             <div class="form-group">
               <label for="">Ngày đi:</label>
-              <input name="checkoutdate" type="text" class="form-control" id="dateend" value="<?php echo $checkoutdate; ?>">
+              <input name="checkoutdate" type="date" class="form-control" id="dateend" value="<?php echo $checkoutdate; ?>">
             </div>
             <div class="form-group">
               <label for="">Giá: <span id="preview-price"></span></label>
@@ -172,7 +208,7 @@
 
           </div>
           <hr>
-          <input type="submit" class="btn btn-default btn-block" value="Tìm Kiếm">
+          <input type="submit" class="btn btn-default btn-block" value="Tìm Kiếm" name="search">
         </form>
       </div>
     </div>
@@ -195,10 +231,10 @@
           ?>
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <a href="<?php echo "details.php?id=" .$rowP[0]; ?>"><img style =" height: 130px" class="card-img-top" src="Images/<?php echo $rowP[4]; ?>" alt=""></a>
+              <a href="<?php echo "detail.php?id=" .$rowP[0]; ?>"><img style =" height: 130px" class="card-img-top" src="Images/<?php echo $rowP[4]; ?>" alt=""></a>
               <div class="card-body" style="text-align: center;">
                 <h4 class="card-title">
-                  <a href="<?php echo "details.php?id=" .$rowP[0]; ?>"><?php echo $rowP[1]; ?></a>
+                  <a href="<?php echo "detail.php?id=" .$rowP[0]; ?>"><?php echo $rowP[1]; ?></a>
                 </h4>
               </div>
               <div class="truncate-text" style="text-align: center; margin-left: 10px; margin-right: 10px; height: 100px">
@@ -209,13 +245,19 @@
               <div class="card-footer">
                 <h6>Giá: <span class="price"> <?php echo $rowP[3]; ?></span></h6> 
                 <hr>
-                <a class='btn btn-success btn-block' href="details.php?id<?php echo $rowP[0]; ?>">Xem chi tiết</a>
+                <a class='btn btn-success btn-block' href="detail.php?id=<?php echo $rowP[0]; ?>">Xem chi tiết</a>
                 <!-- <input type='submit' name='add_to_cart' class='btn btn-success' value='Thêm vào giỏ hàng'>  -->
               </div>
             </div>
           </div> 
-        </div>
-        <hr style="clear: both;">
+
+
+          <?php
+
+        }
+        echo "</div>";
+        ?>
+        <hr>
 
         <nav aria-label="Page navigation example">
           <ul class="pagination" style="margin-left: 300px;">
@@ -223,11 +265,11 @@
             for($i=1; $i<=$sotrang; $i++)
             {
               if($i==$p)
-                echo "<li class='page-item active'> <a class='page-link' href='index.php?p=$i'>$i</a></li>";
+                echo "<li class='page-item active'> <a class='page-link' href='$currentURL?p=$i'>$i</a></li>";
               else
               {
                 ?>
-                <li class="page-item"> <a class="page-link" href="index.php?p=<?php echo $i;    ?>"><?php echo $i;    ?></a></li>
+                <li class="page-item"> <a class="page-link" href="<?php echo $currentURL; ?>?p=<?php echo $i;    ?>"><?php echo $i;    ?></a></li>
                 <?php
               }
             }
@@ -236,25 +278,26 @@
           </ul>
         </nav>
         <?php
-      }
-    }else{
-     echo "<h3>Không tìm thấy dữ liệu phù hợp.<h3>";
-   }
+
+
+      }else{
+       echo "<h3>Không tìm thấy dữ liệu phù hợp.<h3>";
+     }
 
 
 
-   ?>
+     ?>
 
 
-   
+
+
+   </div>
+   <!-- /.row -->
 
  </div>
+ <!-- /.col-lg-9 -->
+ <!-- Sidebar Widgets Column -->
  <!-- /.row -->
-
-</div>
-<!-- /.col-lg-9 -->
-<!-- Sidebar Widgets Column -->
-<!-- /.row -->
 
 </div>
 <!-- /.container -->
@@ -278,21 +321,52 @@
 
 <script type="text/javascript">
 
-  $('.price').each(function( index ) {
+  function ValidationDate(datestart, dateend) {
+   if (datestart > dateend) {
+    alert("Chọn ngày không hợp lệ.");
+    $('#dateend').val("");
+  }
 
-    var priceR = parseInt($(this).text()).toString();;
+}
 
-    var formatprice = FormatNumber(priceR) + ' VNĐ / Ngày';
+$('#datestart').bind('change', function() {
+  var datestart = $('#datestart').val();
+  var dateend = $('#dateend').val();
 
-    $(this).text(formatprice);
 
-  });
 
-  var price = $('#price').val();
-  $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ / Ngày');
+  if (datestart != "" && dateend != "") {
+    ValidationDate(datestart, dateend);          
+  }
 
-  $('#datestart').datepicker();
-  $('#dateend').datepicker();
+
+});
+
+$('#dateend').bind('change', function() {
+  var datestart = $('#datestart').val();
+  var dateend = $('#dateend').val();
+
+  if (datestart != "" && dateend != "") {
+    ValidationDate(datestart, dateend);
+  }
+
+});
+
+$('.price').each(function( index ) {
+
+  var priceR = parseInt($(this).text()).toString();;
+
+  var formatprice = FormatNumber(priceR) + ' VNĐ / Ngày';
+
+  $(this).text(formatprice);
+
+});
+
+var price = $('#price').val();
+$('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ / Ngày');
+
+  // $('#datestart').datepicker();
+  // $('#dateend').datepicker();
 
     // Without JQuery
     $('#price').bind('change', function(){

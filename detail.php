@@ -4,197 +4,181 @@
 <head>
 
  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <link rel="icon" href="Images/logo.ico">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <meta name="description" content="">
+ <meta name="author" content="">
+ <link rel="icon" href="Images/logo.ico">
 
-  <title>Chi tiết</title>
+ <title>Chi tiết</title>
 
-  <!-- Slider -->
+ <!-- Slider -->
 
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.0/css/bootstrap-slider.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.0/css/bootstrap-slider.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.0/bootstrap-slider.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.0/bootstrap-slider.min.js"></script>
+ <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.0/css/bootstrap-slider.css">
+ <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.0/css/bootstrap-slider.min.css">
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.0/bootstrap-slider.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.0/bootstrap-slider.min.js"></script>
 
-  <!-- Bootstrap core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+ <!-- Bootstrap core CSS -->
+ <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Custom styles for this template -->
-  <link href="css/blog-post.css" rel="stylesheet">
+ <!-- Custom styles for this template -->
+ <link href="css/blog-post.css" rel="stylesheet">
 
-  <!-- datetime picker -->
+ <!-- datetime picker -->
 
-  <link href="vendor/jquery/jquery-ui.css" rel="stylesheet" >
-  <link href="vendor/bootstrap/css/datepicker.css" rel="stylesheet">
+ <link href="vendor/jquery/jquery-ui.css" rel="stylesheet" >
+ <link href="vendor/bootstrap/css/datepicker.css" rel="stylesheet">
 
 </head>
 
 <body>
+  <?php 
+  include("connection.php");
+  include("session_datechecking.php");
+  DateCheckingSession();
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="index.php"><img src="Images/logo.png" alt="logo" style="width: 35px"> Kingsman Homestay</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="index.php">Trang chủ
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Giới thiệu</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Liên hệ</a>
-          </li>
+  if (!empty($_SESSION["datechecking"])) {
+   $checkindate = $_SESSION["datechecking"]["checkindate"];
+   $checkoutdate = $_SESSION["datechecking"]["checkoutdate"];
+ }
 
-        </ul>
-      </div>
-    </div>
-  </nav>
+ 
 
-  <!-- Page Content -->
+
+
+
+ $id = $_GET["id"];
+
+ $lenhR = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name as ImageName, rooms.NumberOfPeople, rooms.Ultilities, rooms.CategoryID  from rooms join (SELECT name, RoomID FROM images GROUP by RoomID) as Images on rooms.ID = images.RoomID where id = \"$id\"";
+
+
+
+
+ $kqR = mysqli_query($conn,$lenhR);
+ $row = mysqli_fetch_row($kqR);
+
+ $lenhRLQ = "SELECT rooms.ID, rooms.Name, rooms.Price, images.Name as ImageName from rooms join (SELECT name, RoomID FROM images GROUP by RoomID) as Images on rooms.ID = images.RoomID where rooms.CategoryID = ".$row[7]." and rooms.Price >= ".$row[3];
+
+ $kqRLQ = mysqli_query($conn,$lenhRLQ);
+ $rowRLQ = mysqli_fetch_row($kqRLQ);
+
+ ?>
+
+ <!-- Navigation -->
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
   <div class="container">
+    <a class="navbar-brand" href="index.php"><img src="Images/logo.png" alt="logo" style="width: 35px"> Kingsman Homestay</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="index.php">Trang chủ
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Giới thiệu</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Liên hệ</a>
+        </li>
 
-    <div class="row">
-     <div class="col-md-4"  style="margin-top: 97px">
-
-      <!-- Search Widget -->
-
-
-      <!-- Side Widget -->
-      <div class="card my-4">
-        <h5 class="card-header">Phòng tương tự</h5>
-        <div class="card-body">
-          
-        </div>
-      </div>
-
+      </ul>
     </div>
-    <!-- Post Content Column -->
-    <div class="col-lg-8">
+  </div>
+</nav>
 
-      <h1 class="my-4">T-Homestay Da Nang
-      </h1>
-      207 Duong Dinh Nghe, Đà Nẵng, Việt Nam
+<!-- Page Content -->
+<div class="container">
 
-      <!-- Portfolio Item Row -->
-      <div class="row">
+  <div class="row">
+   <div class="col-md-2"  style="margin-top: 97px">
 
-        <div class="col-lg-8">
-          <img class="img-fluid" src="http://placehold.it/750x500" alt="">
-        </div>
+    <!-- Search Widget -->
 
-        <div class="col-lg-4">
 
-          <form>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="">Ngày đến:</label>
-                  <input type="" class="form-control" id="">
-                </div>
-              </div>
-              <div class="form-group col-md-6">
-                <label for="">Ngày đi:</label>
-                <input type="" class="form-control" id="">
-              </div>
-              <div class="form-group col-md-6">
-                <label for="sel1">Số phòng:</label>
-                <select class="form-control" id="sel1">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                  <option>6</option>
-                  <option>7</option>
-                  <option>8</option>
-                  <option>9</option>
-                  <option>10</option>
-                </select>
-              </div>
-              <div class="form-group col-md-6">
-                <label for="sel1">Số người:</label>
-                <select class="form-control" id="sel1">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                  <option>6</option>
-                  <option>7</option>
-                  <option>8</option>
-                  <option>9</option>
-                  <option>10</option>
-                </select>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Đặt phòng</button>
-          </form>
-
-        </div>
-
+    <!-- Side Widget -->
+    <div class="card my-4">
+      <h6 class="card-header">Phòng tương tự</h6>
+      <div class="card-body">
 
       </div>
+    </div>
+
+  </div>
+  <!-- Post Content Column -->
+  <div class="col-lg-10">
+
+    <h1 class="my-4"><?php echo $row[1]; ?></h1>
+    <hr>
+
+    <!-- Portfolio Item Row -->
+    <div class="row">
+
+      <div class="col-lg-8">
+        <img class="img-fluid" src="Images/<?php echo $row[4]; ?>" alt="">
+      </div>
+
+
+      <div class="col-lg-4">
+        <form action="booking.php" method="POST">
+          <label for="">Họ và tên:</label>
+          <input required type="text" class="form-control" id="" name="customername">
+
+          <label for="">Số điện thoại:</label>
+          <input required type="text" class="form-control" id="customerphone" name="customerphone"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+
+          <?php
+
+          $checkindate;
+          $checkoutdate;
+          if (!empty($_SESSION["datechecking"])) {
+            $checkindate = $_SESSION["datechecking"]["checkindate"];
+            $checkoutdate = $_SESSION["datechecking"]["checkoutdate"];
+          }
+          ?>
+
+          <input id="roomID" type="hidden" name="roomID" value="<?php echo $row[0]; ?>">
+
+          <label for="">Ngày đến:</label>
+          <input required id="datestart" type="date" class="form-control" id="" name="checkindate" value="<?php echo $checkindate; ?>">
+
+
+          <label for="">Ngày đi:</label>
+          <input required id="dateend" type="date" class="form-control" id="" name="checkoutdate" value="<?php echo $checkoutdate; ?>">
+
+          <label id="checkduplicatedate-message" style="color:red; display: none;">Đã có người đăng ký trong khoảng thời gian này rồi, Vui lòng chọn khoảng thời gian khác.</label>
+
+          <input type="hidden" name="total" id="hiddentotal">
+
+          <strong><p style="margin-top: 20px">Tổng tiền: <span id="total" style="color: red;"></span> </p></strong>
+
+          <hr>
+          <input type="submit" class="btn btn-primary btn-lg btn-block" name="booking" value="Đặt phòng" />
+
+
+        </div>
+      </div>
+
+      <hr>
+      <div>
+        <p><strong style="font-size: 21px">Giá: </strong> <span class="price"><?php echo $row[3]; ?></span></p>
+        <input type="hidden" id="hiddenprice" value="<?php echo $row[3]; ?>">
+        <p><strong style="font-size: 21px">Số người ở tối đa: </strong> <span><?php echo $row[5]; ?> người.</span></p>            
+      </div>
+      <hr>
       <div>
         <h3 class="my-3">Mô tả</h3>
-        <p>Chỗ nghỉ này cách bãi biển 6 phút đi bộ. T-Homestay Da Nang nằm ở vị trí trung tâm này cung cấp các phòng nghỉ yên tĩnh và thoải mái với Wi-Fi miễn phí trong toàn khuôn viên. Cả dịch vụ cho thuê xe đạp lẫn bãi đỗ xe đều được cung cấp miễn phí.
-
-          Các phòng máy lạnh tại đây có dịch vụ dọn phòng hàng ngày, sàn lát gạch, truyền hình cáp màn hình phẳng và bộ khăn trải giường mới giặt. Ngoài ra còn đi kèm phòng tắm riêng với tiện nghi vòi sen, dép và khăn tắm.
-
-          Nhân viên thân thiện, thông thạo tiếng Anh và tiếng Việt tại T-Homestay Da Nang có thể hỗ trợ quý khách với dịch vụ giặt là, ủi và đặt vé. Dịch vụ cho thuê xe hơi cũng có sẵn và dịch vụ đưa/đón sân bay có thể được bố trí với một khoản phụ phí.
-
-          T-Homestay Da Nang nằm trong bán kính chỉ 300 m từ Chợ Bà Kỷ và 500 m từ Bãi biển Mỹ Khê. Khách sạn cách Cầu Sông Hàn 1,1 km và Bảo tàng Chăm 1,8 km lái xe. Sân bay Quốc tế Đà Nẵng cách đó 5 km lái xe. 
-
-          Chúng tôi sử dụng ngôn ngữ của bạn!
-
-        T-Homestay Da Nang đã chào đón khách Booking.com từ Ngày 2 Tháng 10 Năm 2014.</p>
+        <p><?php echo $row[2]; ?></p>
         <h3 class="my-3">Các tiện ích phòng</h3>
-        <ul>
-          <li>Wi-Fi miễn phí</li>
-          <li>Chỗ đỗ xe miễn phí</li>
-          <li>Phòng không hút thuốc</li>
-        </ul>
+        <p><?php echo $row[6]; ?></p>
       </div>
       <!-- /.row -->
 
       <!-- Related Projects Row -->
-      <h3 class="my-4">Các homestay tương tự</h3>
 
-      <div class="row">
-
-        <div class="col-md-3 col-sm-6 mb-4">
-          <a href="#">
-            <img class="img-fluid" src="http://placehold.it/500x300" alt="">
-          </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6 mb-4">
-          <a href="#">
-            <img class="img-fluid" src="http://placehold.it/500x300" alt="">
-          </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6 mb-4">
-          <a href="#">
-            <img class="img-fluid" src="http://placehold.it/500x300" alt="">
-          </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6 mb-4">
-          <a href="#">
-            <img class="img-fluid" src="http://placehold.it/500x300" alt="">
-          </a>
-        </div>
-
-      </div>
       <!-- /.row -->
 
       <!-- /.row -->
@@ -205,9 +189,10 @@
     <!-- /.row -->
 
   </div>
+  <br>
+  <br>
+  <br>
   <!-- /.container -->
-
-  <!-- Footer -->
   <footer class="py-5 bg-dark">
     <div class="container">
       <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
@@ -215,10 +200,204 @@
     <!-- /.container -->
   </footer>
 
-  <!-- Bootstrap core JavaScript -->
+  <!-- Footer -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/popper/popper.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+  <!-- datepicker -->
+  <script src="vendor/bootstrap/js/bootstrap-datepicker.js"></script>
+
+
+  <script type="text/javascript">
+
+    if ($('#datestart').val() == "" || $('#dateend').val() == "" ) {
+      $('#hiddentotal').val(0);
+    }else{
+
+      var total = CalculateTotal($('#datestart').val(), $('#dateend').val(), $('#hiddenprice').val());
+
+      $('#hiddentotal').val(total);
+
+      $('#total').text(FormatNumber(total.toString()) + ' VNĐ / ' + DiffDate($('#datestart').val(), $('#dateend').val()) + ' Ngày');
+
+      var roomID = $('#roomID').val();
+       CheckDuplicateDate($('#datestart').val(), $('#dateend').val(),roomID);
+    }
+
+
+    function CheckDuplicateDate(datestart, dateend,roomID) {
+
+      $.ajax({
+        url: 'checkduplicatedate.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {roomID: roomID,
+          checkindate: datestart,
+         checkoutdate: dateend
+
+       },
+       success: function(response) {
+        if (response.isExist) {
+
+          $('#checkduplicatedate-message').css('display','inline');
+          $('#dateend').val("");
+          $('#hiddentotal').val(0);
+          $('#total').text("");
+        }else{
+          $('#checkduplicatedate-message').css('display','none');
+        }
+      }
+    });
+
+
+
+    }
+
+    function DiffDate(datestart, dateend) {
+      var result = new Date(dateend).getDate() - new Date(datestart).getDate();
+      if (result == 1) {
+        return "";
+      }else{
+        return result;
+      }
+
+    }
+
+    function CalculateTotal(datestart, dateend, price){ 
+      var dateleft = new Date(dateend).getDate() - new Date(datestart).getDate();
+      var total = dateleft * price;
+
+      return total;
+    }
+
+    function ValidationDate(datestart, dateend) {
+     if (datestart > dateend) {
+      alert("Chọn ngày không hợp lệ.");
+      $('#dateend').val("");
+    }else{
+      var roomID = $('#roomID').val();
+       CheckDuplicateDate(datestart, dateend,roomID);
+    }
+
+  }
+
+  $('#datestart').bind('change', function() {
+    var datestart = $('#datestart').val();
+    var dateend = $('#dateend').val();
+    var price = $('#hiddenprice').val();
+
+    if (datestart != "" && dateend != "") {
+      ValidationDate(datestart, dateend); 
+
+      $('#hiddentotal').val(CalculateTotal(datestart, dateend, price));
+      $('#total').text(FormatNumber(CalculateTotal(datestart, dateend, price).toString()) + ' VNĐ / ' + DiffDate($('#datestart').val(), $('#dateend').val()) + ' Ngày');
+
+
+
+    }
+
+
+  });
+
+  $('#dateend').bind('change', function() {
+    var datestart = $('#datestart').val();
+    var dateend = $('#dateend').val();
+    var price = $('#hiddenprice').val();
+
+    if (datestart != "" && dateend != "") {
+      ValidationDate(datestart, dateend);
+
+      $('#hiddentotal').val(CalculateTotal(datestart, dateend, price));
+
+
+
+      $('#total').text(FormatNumber(CalculateTotal(datestart, dateend, price).toString()) + ' VNĐ / ' + DiffDate($('#datestart').val(), $('#dateend').val()) + ' Ngày');
+
+    }
+
+  });
+
+  $('.price').each(function( index ) {
+
+    var priceR = parseInt($(this).text()).toString();
+
+    var formatprice = FormatNumber(priceR) + ' VNĐ / Ngày';
+
+    $(this).text(formatprice);
+
+  });
+
+
+  function FormatNumber(str) {
+    var strTemp = GetNumber(str);
+    if (strTemp.length <= 3)
+      return strTemp;
+    strResult = "";
+    for (var i = 0; i < strTemp.length; i++)
+      strTemp = strTemp.replace(",", "");
+    var m = strTemp.lastIndexOf(".");
+    if (m == -1) {
+      for (var i = strTemp.length; i >= 0; i--) {
+        if (strResult.length > 0 && (strTemp.length - i - 1) % 3 == 0)
+          strResult = "," + strResult;
+        strResult = strTemp.substring(i, i + 1) + strResult;
+      }
+    } else {
+      var strphannguyen = strTemp.substring(0, strTemp.lastIndexOf("."));
+      var strphanthapphan = strTemp.substring(strTemp.lastIndexOf("."),
+        strTemp.length);
+      var tam = 0;
+      for (var i = strphannguyen.length; i >= 0; i--) {
+
+        if (strResult.length > 0 && tam == 4) {
+          strResult = "," + strResult;
+          tam = 1;
+        }
+
+        strResult = strphannguyen.substring(i, i + 1) + strResult;
+        tam = tam + 1;
+      }
+      strResult = strResult + strphanthapphan;
+    }
+    return strResult;
+  }
+
+  function GetNumber(str) {
+    var count = 0;
+    for (var i = 0; i < str.length; i++) {
+      var temp = str.substring(i, i + 1);
+      if (!(temp == "," || temp == "." || (temp >= 0 && temp <= 9))) {
+        alert(inputnumber);
+        return str.substring(0, i);
+      }
+      if (temp == " ")
+        return str.substring(0, i);
+      if (temp == ".") {
+        if (count > 0)
+          return str.substring(0, ipubl_date);
+        count++;
+      }
+    }
+    return str;
+  }
+
+  function IsNumberInt(str) {
+    for (var i = 0; i < str.length; i++) {
+      var temp = str.substring(i, i + 1);
+      if (!(temp == "." || (temp >= 0 && temp <= 9))) {
+        alert(inputnumber);
+        return str.substring(0, i);
+      }
+      if (temp == ",") {
+        return str.substring(0, i);
+      }
+    }
+    return str;
+  }
+
+
+</script>
 
 </body>
 

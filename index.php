@@ -37,6 +37,16 @@
   <?php 
 
   include("connection.php");
+  include("session_datechecking.php");
+  DateCheckingSession();
+
+  // if (!empty($_SESSION["datechecking"])) {
+  //   // $checkindate = $_SESSION["datechecking"]["checkindate"];
+  //   // $checkoutdate = $_SESSION["datechecking"]["checkoutdate"];
+
+  //   // echo  $checkindate ;
+  //    echo  "OK" ;
+  // }
 
 
   $lenhLP = 'select id, name from categories';
@@ -105,7 +115,7 @@
                   while($rowLP = mysqli_fetch_row($kqlenhLP))
                   {
 
-                   
+
                     echo "<option value=$rowLP[0]>$rowLP[1]</option>";
 
                   }
@@ -114,11 +124,11 @@
               </div>
               <div class="form-group">
                 <label for="">Ngày đến:</label>
-                <input name="checkindate" type="text" class="form-control" id="datestart">
+                <input name="checkindate" type="date" class="form-control" id="datestart">
               </div>
               <div class="form-group">
                 <label for="">Ngày đi:</label>
-                <input name="checkoutdate" type="text" class="form-control" id="dateend">
+                <input name="checkoutdate" type="date" class="form-control" id="dateend">
               </div>
               <div class="form-group">
                 <label for="">Giá: <span id="preview-price"></span></label>
@@ -137,7 +147,7 @@
                 </select>
               </div>
               <hr>
-              <input type="submit" class="btn btn-default btn-block" value="Tìm Kiếm">
+              <input type="submit" class="btn btn-default btn-block" value="Tìm Kiếm" name="search">
             </form>
           </div>
         </div>
@@ -180,10 +190,10 @@
             ?>
             <div class="col-lg-4 col-md-6 mb-4">
               <div class="card h-100">
-                <a href="<?php echo "details.php?id=" .$rowP[0]; ?>"><img style =" height: 130px" class="card-img-top" src="Images/<?php echo $rowP[4]; ?>" alt=""></a>
+                <a href="<?php echo "detail.php?id=" .$rowP[0]; ?>"><img style =" height: 130px" class="card-img-top" src="Images/<?php echo $rowP[4]; ?>" alt=""></a>
                 <div class="card-body" style="text-align: center;">
                   <h4 class="card-title">
-                    <a href="<?php echo "details.php?id=" .$rowP[0]; ?>"><?php echo $rowP[1]; ?></a>
+                    <a href="<?php echo "detail.php?id=" .$rowP[0]; ?>"><?php echo $rowP[1]; ?></a>
                   </h4>
                 </div>
                 <div class="truncate-text" style="text-align: center; margin-left: 10px; margin-right: 10px; height: 100px">
@@ -194,7 +204,7 @@
                 <div class="card-footer">
                   <h6>Giá: <span class="price"> <?php echo $rowP[3]; ?></span></h6> 
                   <hr>
-                  <a class='btn btn-success btn-block' href="details.php?id<?php echo $rowP[0]; ?>">Xem chi tiết</a>
+                  <a class='btn btn-success btn-block' href="detail.php?id=<?php echo $rowP[0]; ?>">Xem chi tiết</a>
                   <!-- <input type='submit' name='add_to_cart' class='btn btn-success' value='Thêm vào giỏ hàng'>  -->
                 </div>
               </div>
@@ -254,24 +264,55 @@
 
     <script type="text/javascript">
 
-      $('.price').each(function( index ) {
+      function ValidationDate(datestart, dateend) {
+       if (datestart > dateend) {
+        alert("Chọn ngày không hợp lệ.");
+        $('#dateend').val("");
+      }
 
-        var priceR = parseInt($(this).text()).toString();;
+    }
 
-        var formatprice = FormatNumber(priceR) + ' VNĐ / Ngày';
-
-        $(this).text(formatprice);
-        
-      });
-
-      
-
-      var price = $('#price').val();
-      $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ / Ngày');
+    $('#datestart').bind('change', function() {
+      var datestart = $('#datestart').val();
+      var dateend = $('#dateend').val();
 
 
-      $('#datestart').datepicker();
-      $('#dateend').datepicker();
+
+      if (datestart != "" && dateend != "") {
+        ValidationDate(datestart, dateend);          
+      }
+
+
+    });
+
+    $('#dateend').bind('change', function() {
+      var datestart = $('#datestart').val();
+      var dateend = $('#dateend').val();
+
+      if (datestart != "" && dateend != "") {
+        ValidationDate(datestart, dateend);
+      }
+
+    });
+
+    $('.price').each(function( index ) {
+
+      var priceR = parseInt($(this).text()).toString();;
+
+      var formatprice = FormatNumber(priceR) + ' VNĐ / Ngày';
+
+      $(this).text(formatprice);
+
+    });
+
+
+
+    var price = $('#price').val();
+    $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ / Ngày');
+
+
+      // $('#datestart').datepicker();
+      // $('#dateend').datepicker();
 
     // Without JQuery
     $('#price').bind('change', function(){
