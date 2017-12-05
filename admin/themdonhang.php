@@ -209,7 +209,9 @@ $kq = mysqli_query($conn,$lenh);
           $kq = mysqli_query($conn,$lenh);
           while($row = mysqli_fetch_row($kq))
             {
-              echo " <option value=$row[0]>$row[1]</option>";
+              if ($row[6]==1) {
+                  echo " <option value=$row[0]>$row[1]</option>";
+              }
             }
            ?>
       </select>

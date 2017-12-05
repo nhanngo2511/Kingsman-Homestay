@@ -222,7 +222,9 @@ $kq = mysqli_query($conn,$lenh);
                       echo " <option value=$row1[0] selected>$row1[1]</option>";
                   }
                   else {
-                    echo " <option value=$row1[0]>$row1[1]</option>";
+                    if ($row1[6]==1) {
+                      echo " <option value=$row1[0]>$row1[1]</option>";
+                    }
                   }
                 }
           echo "</select>
