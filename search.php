@@ -94,8 +94,6 @@
 
     $kqlenhtotalrows = mysqli_query($conn,$lenhtotalrows);
 
-    echo   $lenhtotalrows;
-
   $tongsodong = mysqli_num_rows($kqlenhtotalrows);
   $sotrang = ceil($tongsodong / $sodong);
 
