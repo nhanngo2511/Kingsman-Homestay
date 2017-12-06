@@ -64,7 +64,7 @@
   else
     $p = $_GET["p"];
   $x = ($p - 1)*$sodong;
-  $lenh1 = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name as ImageName from rooms join (SELECT name, RoomID FROM images GROUP by RoomID) as Images on rooms.ID = images.RoomID order by rooms.ID DESC limit ".$x.",".$sodong;
+  $lenh1 = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name as ImageName from rooms join (SELECT name, RoomID FROM images GROUP by RoomID) as images on rooms.ID = images.RoomID order by rooms.ID DESC limit ".$x.",".$sodong;
   $kq1 = mysqli_query($conn,$lenh1);
 
   ?>
@@ -108,7 +108,7 @@
         <div class="card my-4">
           <h5 class="card-header">Tìm kiếm</h5>
           <div class="card-body">
-            <form method="GET" action="Search.php">
+            <form method="GET" action="search.php">
               <div class="form-group">
                 <label for="">Loại phòng:</label>
                 <select name="category" class="form-control">

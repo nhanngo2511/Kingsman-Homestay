@@ -85,8 +85,11 @@
     $p = $_GET["p"];
   $x = ($p - 1)*$sodong;
 
+
+
+
   $lenhtotalrows = "SELECT COUNT(rooms.ID) AS rows
-  FROM rooms JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS Images ON rooms.ID = images.RoomID 
+  FROM rooms JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS images ON rooms.ID = images.RoomID 
   JOIN (SELECT DISTINCT orders.RoomID 
   FROM orders
   WHERE ((\"$formatcheckindate\" < orders.CheckInDate AND \"$formatcheckoutdate\" < orders.CheckInDate) OR (\"$formatcheckindate\" > orders.CheckOutDate AND \"$formatcheckoutdate\" > orders.CheckOutDate))
@@ -96,6 +99,20 @@
   rooms.CategoryID like \"%$category%\" AND 
   rooms.Price >= " .$price;
 
+
+  if ($checkoutdate == null || $checkindate == null) {
+    $lenhtotalrows = "SELECT COUNT(rooms.ID) AS rows
+    FROM rooms JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS images ON rooms.ID = images.RoomID 
+    JOIN (SELECT DISTINCT orders.RoomID 
+    FROM orders
+    WHERE rooms.Status = 1 AND 
+    rooms.NumberOfPeople >= " .$members." AND
+    rooms.CategoryID like \"%$category%\" AND 
+    rooms.Price >= " .$price;
+    
+  }
+
+
   $kqlenhtotalrows = mysqli_query($conn,$lenhtotalrows);
 
   $tongsodong = mysqli_fetch_assoc($kqlenhtotalrows)["rows"];
@@ -103,7 +120,7 @@
 
 
   $lenh1 = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name AS ImageName 
-  FROM rooms JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS Images ON rooms.ID = images.RoomID 
+  FROM rooms JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS images ON rooms.ID = images.RoomID 
   JOIN (SELECT DISTINCT orders.RoomID 
   FROM orders
   WHERE ((\"$formatcheckindate\" < orders.CheckInDate AND \"$formatcheckoutdate\" < orders.CheckInDate) OR (\"$formatcheckindate\" > orders.CheckOutDate AND \"$formatcheckoutdate\" > orders.CheckOutDate))
@@ -115,14 +132,31 @@
   ORDER BY rooms.Price limit ".$x.",".$sodong;
 
 
+  if ($checkoutdate == null || $checkindate == null) {
+   $lenh1 = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name AS ImageName 
+   FROM rooms JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS images ON rooms.ID = images.RoomID 
 
-  $kq1 = mysqli_query($conn,$lenh1);
+   WHERE rooms.Status = 1 AND 
+   rooms.NumberOfPeople >= " .$members." AND
+   rooms.CategoryID like \"%$category%\" AND 
+   rooms.Price >= " .$price."
+   ORDER BY rooms.Price limit ".$x.",".$sodong;
+   
+ }
 
-  ?>
 
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+
+
+
+
+ $kq1 = mysqli_query($conn,$lenh1);
+
+ ?>
+
+
+ <!-- Navigation -->
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
    <div class="container">
     <a class="navbar-brand" href="index.php"><img class="spin" src="admin/images/logo.png" alt="logo" style="width: 35px"> Kingsman Homestay</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,7 +166,7 @@
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <a class="nav-link" href="index.php">Trang chủ
-           
+
           </a>
         </li>
         <li class="nav-item">
@@ -160,7 +194,7 @@
       <div class="card my-4">
         <h5 class="card-header">Tìm kiếm</h5>
         <div class="card-body">
-          <form method="GET" action="Search.php">
+          <form method="GET" action="search.php">
             <div class="form-group">
               <label for="">Loại phòng:</label>
               <select name="category" class="form-control">
@@ -309,37 +343,37 @@
 </div>
 <!-- Footer -->
 <footer id="myFooter">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-3">
-          <img class="spin" src="admin/images/logo.png" style="width: 130px">
-        </div>
-        <div class="col-sm-2">
-           <h6>Kingsman Homestay</h6>
-          <ul>
-            <li><a href="#">Trang chủ</a></li>
-            <li><a href="introduce.php">Giới thiệu</a></li>
-            <li><a href="contact.php">Liên hệ</a></li>
-          </ul>
-        </div>
-        <div class="col-sm-4">
-          <div id="googleMap" style="width:100%;height:100%;"></div>
-
-        </div>
-
-        <div class="col-sm-3">
-          <div class="social-networks">
-            <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
-            <a href="#" class="google"><i class="fa fa-google-plus"></i></a>
-          </div>
-
-        </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3">
+        <img class="spin" src="admin/images/logo.png" style="width: 130px">
       </div>
+      <div class="col-sm-2">
+       <h6>Kingsman Homestay</h6>
+       <ul>
+        <li><a href="#">Trang chủ</a></li>
+        <li><a href="introduce.php">Giới thiệu</a></li>
+        <li><a href="contact.php">Liên hệ</a></li>
+      </ul>
     </div>
-    <div class="footer-copyright">
-      <p>© 2016 Copyright Text </p>
+    <div class="col-sm-4">
+      <div id="googleMap" style="width:100%;height:100%;"></div>
+
     </div>
-  </footer>
+
+    <div class="col-sm-3">
+      <div class="social-networks">
+        <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+        <a href="#" class="google"><i class="fa fa-google-plus"></i></a>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="footer-copyright">
+  <p>© 2016 Copyright Text </p>
+</div>
+</footer>
 
 <!-- Bootstrap core JavaScript -->
 <script src="vendor/jquery/jquery.min.js"></script>
@@ -353,18 +387,18 @@
 <script type="text/javascript">
 
   function myMap() {
-      var mapProp= {
-        center:new google.maps.LatLng(10.762996, 106.693339),
-        zoom:15,
+    var mapProp= {
+      center:new google.maps.LatLng(10.762996, 106.693339),
+      zoom:15,
 
-      };
-      var mapPin = " http://www.google.com/mapfiles/marker.png";
-      var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-      var Marker = new google.maps.Marker({
-       map: map,
-       position: map.getCenter()
-     });
-    }
+    };
+    var mapPin = " http://www.google.com/mapfiles/marker.png";
+    var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    var Marker = new google.maps.Marker({
+     map: map,
+     position: map.getCenter()
+   });
+  }
 
   function ValidationDate(datestart, dateend) {
    if (datestart > dateend) {

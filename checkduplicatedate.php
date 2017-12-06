@@ -25,6 +25,8 @@ $lenh = "SELECT COUNT(orders.ID) AS rows
   WHERE orders.RoomID = '$roomID' AND
   ((\"$formatcheckindate\" < orders.CheckInDate AND \"$formatcheckoutdate\" < orders.CheckInDate) OR (\"$formatcheckindate\" > orders.CheckOutDate AND \"$formatcheckoutdate\" > orders.CheckOutDate))";
 
+  echo $lenh;
+
 
 
 $kq = mysqli_query($conn,$lenh);

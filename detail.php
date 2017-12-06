@@ -52,7 +52,7 @@
 
  $id = $_GET["id"];
 
- $lenhR = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name as ImageName, rooms.NumberOfPeople, rooms.Ultilities, rooms.CategoryID  from rooms join (SELECT name, RoomID FROM images GROUP by RoomID) as Images on rooms.ID = images.RoomID where id = \"$id\"";
+ $lenhR = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name as ImageName, rooms.NumberOfPeople, rooms.Ultilities, rooms.CategoryID  from rooms join (SELECT name, RoomID FROM images GROUP by RoomID) as images on rooms.ID = images.RoomID where id = \"$id\"";
 
 
 
@@ -60,13 +60,12 @@
  $kqR = mysqli_query($conn,$lenhR);
  $row = mysqli_fetch_row($kqR);
 
- $lenhRLQ = "SELECT rooms.ID, rooms.Name, rooms.Price, images.Name as ImageName from rooms join (SELECT name, RoomID FROM images GROUP by RoomID) as Images on rooms.ID = images.RoomID where rooms.CategoryID like \"%$row[7]%\"and rooms.Price >= ".$row[3]." AND roomID != ".$id;
+ $lenhRLQ = "SELECT rooms.ID, rooms.Name, rooms.Price, images.Name as ImageName from rooms join (SELECT name, RoomID FROM images GROUP by RoomID) as images on rooms.ID = images.RoomID where rooms.CategoryID like \"%$row[7]%\" AND roomID != ".$id;
 
  $kqRLQ = mysqli_query($conn,$lenhRLQ);
 
  $lenhA = "SELECT Name FROM images where roomID = ".$id;
  $kqlenhA = mysqli_query($conn,$lenhA);
-
 
 
 
