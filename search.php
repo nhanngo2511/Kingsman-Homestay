@@ -48,6 +48,7 @@
 
 
   $currentURL = $_SERVER["REQUEST_URI"];
+  $currentURL = strstr($currentURL,"&p=",true);
 
 
   $category = @$_GET["category"];
@@ -82,32 +83,36 @@
     $p = $_GET["p"];
   $x = ($p - 1)*$sodong;
 
-  $lenhtotalrows = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name AS ImageName
-  FROM rooms
-  JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS Images ON rooms.ID = images.RoomID
-  JOIN orders on orders.RoomID = rooms.ID
-  WHERE rooms.Status = 1 AND
+  $lenhtotalrows = "SELECT COUNT(rooms.ID) AS rows
+  FROM rooms JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS Images ON rooms.ID = images.RoomID 
+  JOIN (SELECT DISTINCT orders.RoomID 
+  FROM orders
+  WHERE ((\"$formatcheckindate\" < orders.CheckInDate AND \"$formatcheckoutdate\" < orders.CheckInDate) OR (\"$formatcheckindate\" > orders.CheckOutDate AND \"$formatcheckoutdate\" > orders.CheckOutDate))
+  ) AS orders ON rooms.ID = orders.RoomID
+  WHERE rooms.Status = 1 AND 
   rooms.NumberOfPeople >= " .$members." AND
   rooms.CategoryID like \"%$category%\" AND 
-  rooms.Price >= " .$price." AND
-  ((\"$formatcheckindate\" < orders.CheckInDate AND \"$formatcheckoutdate\" < orders.CheckInDate) OR (\"$formatcheckindate\" > orders.CheckOutDate AND \"$formatcheckoutdate\" > orders.CheckOutDate))";
+  rooms.Price >= " .$price;
 
-    $kqlenhtotalrows = mysqli_query($conn,$lenhtotalrows);
+  $kqlenhtotalrows = mysqli_query($conn,$lenhtotalrows);
 
-  $tongsodong = mysqli_num_rows($kqlenhtotalrows);
+  $tongsodong = mysqli_fetch_assoc($kqlenhtotalrows)["rows"];
   $sotrang = ceil($tongsodong / $sodong);
 
 
-  $lenh1 = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name AS ImageName
-  FROM rooms
-  JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS Images ON rooms.ID = images.RoomID
-  JOIN orders on orders.RoomID = rooms.ID
-  WHERE rooms.Status = 1 AND
+  $lenh1 = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name AS ImageName 
+  FROM rooms JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS Images ON rooms.ID = images.RoomID 
+  JOIN (SELECT DISTINCT orders.RoomID 
+  FROM orders
+  WHERE ((\"$formatcheckindate\" < orders.CheckInDate AND \"$formatcheckoutdate\" < orders.CheckInDate) OR (\"$formatcheckindate\" > orders.CheckOutDate AND \"$formatcheckoutdate\" > orders.CheckOutDate))
+  ) AS orders ON rooms.ID = orders.RoomID
+  WHERE rooms.Status = 1 AND 
   rooms.NumberOfPeople >= " .$members." AND
   rooms.CategoryID like \"%$category%\" AND 
-  rooms.Price >= " .$price." AND
-  ((\"$formatcheckindate\" < orders.CheckInDate AND \"$formatcheckoutdate\" < orders.CheckInDate) OR (\"$formatcheckindate\" > orders.CheckOutDate AND \"$formatcheckoutdate\" > orders.CheckOutDate))
+  rooms.Price >= " .$price."
   ORDER BY rooms.Price limit ".$x.",".$sodong;
+
+
 
   $kq1 = mysqli_query($conn,$lenh1);
 
@@ -263,11 +268,11 @@
             for($i=1; $i<=$sotrang; $i++)
             {
               if($i==$p)
-                echo "<li class='page-item active'> <a class='page-link' href='$currentURL?p=$i'>$i</a></li>";
+                echo "<li class='page-item active'> <a class='page-link' href='$currentURL&p=$i'>$i</a></li>";
               else
               {
                 ?>
-                <li class="page-item"> <a class="page-link" href="<?php echo $currentURL; ?>?p=<?php echo $i;    ?>"><?php echo $i;    ?></a></li>
+                <li class="page-item"> <a class="page-link" href="<?php echo $currentURL; ?>&p=<?php echo $i;    ?>"><?php echo $i;    ?></a></li>
                 <?php
               }
             }

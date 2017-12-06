@@ -222,7 +222,7 @@
       $('#total').text(FormatNumber(total.toString()) + ' VNĐ / ' + DiffDate($('#datestart').val(), $('#dateend').val()) + ' Ngày');
 
       var roomID = $('#roomID').val();
-       CheckDuplicateDate($('#datestart').val(), $('#dateend').val(),roomID);
+      CheckDuplicateDate($('#datestart').val(), $('#dateend').val(),roomID);
     }
 
 
@@ -234,38 +234,43 @@
         dataType: 'json',
         data: {roomID: roomID,
           checkindate: datestart,
-         checkoutdate: dateend
+          checkoutdate: dateend
 
-       },
-       success: function(response) {
-        if (response.isExist) {
+        },
+        success: function(response) {
+          if (response.isExist) {
 
-          $('#checkduplicatedate-message').css('display','inline');
-          $('#dateend').val("");
-          $('#hiddentotal').val(0);
-          $('#total').text("");
-        }else{
-          $('#checkduplicatedate-message').css('display','none');
+            $('#checkduplicatedate-message').css('display','inline');
+            $('#dateend').val("");
+            $('#hiddentotal').val(0);
+            $('#total').text("");
+          }else{
+            $('#checkduplicatedate-message').css('display','none');
+          }
         }
-      }
-    });
+      });
 
 
 
     }
 
     function DiffDate(datestart, dateend) {
-      var result = new Date(dateend).getDate() - new Date(datestart).getDate();
-      if (result == 1) {
-        return "";
-      }else{
-        return result;
-      }
+
+      datestart = new Date(datestart);
+      dateend = new Date(dateend);
+
+      var diff = (dateend - datestart)/1000;
+      var diff = Math.abs(Math.floor(diff));
+
+      var result = Math.floor(diff/(24*60*60));
+
+      return result;
+      
 
     }
 
     function CalculateTotal(datestart, dateend, price){ 
-      var dateleft = new Date(dateend).getDate() - new Date(datestart).getDate();
+      var dateleft = DiffDate(datestart, dateend);
       var total = dateleft * price;
 
       return total;
@@ -277,7 +282,7 @@
       $('#dateend').val("");
     }else{
       var roomID = $('#roomID').val();
-       CheckDuplicateDate(datestart, dateend,roomID);
+      CheckDuplicateDate(datestart, dateend,roomID);
     }
 
   }
