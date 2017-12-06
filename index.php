@@ -8,6 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <link rel="icon" href="Images/logo.ico">
+  <link rel="stylesheet" href="assets/css/Footer-with-button-logo.css">
 
   <title>Trang chủ</title>
 
@@ -244,71 +245,98 @@
 
     </div>
     <!-- /.container -->
-
-    <!-- Footer -->
-    <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+  </div>
+  <!-- Footer -->
+  <footer id="myFooter">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3">
+          <h2 class="logo"><a href="#"> LOGO </a></h2>
+        </div>
+        <div class="col-sm-2">
+          <h5>Get started</h5>
+          
+        </div>
+        <div class="col-sm-2">
+          <h5>About us</h5>
+          
+        </div>
+        <div class="col-sm-2">
+          <h5>Support</h5>
+          
+        </div>
+        <div class="col-sm-3">
+          <div class="social-networks">
+            <i class="fa fa-facebook" aria-hidden="true"></i>
+            <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+            <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+            <a href="#" class="google"><i class="fa fa-google-plus"></i></a>
+          </div>
+          <button type="button" class="btn btn-default">Contact us</button>
+        </div>
       </div>
-      <!-- /.container -->
-    </footer>
+    </div>
+    <div class="footer-copyright">
+      <p>© 2016 Copyright Text </p>
+    </div>
+  </footer>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/popper/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/popper/popper.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-    <!-- datepicker -->
-    <script src="vendor/bootstrap/js/bootstrap-datepicker.js"></script>
+  <!-- datepicker -->
+  <script src="vendor/bootstrap/js/bootstrap-datepicker.js"></script>
 
 
-    <script type="text/javascript">
+  <script type="text/javascript">
 
-      function ValidationDate(datestart, dateend) {
-       if (datestart > dateend) {
-        alert("Chọn ngày không hợp lệ.");
-        $('#dateend').val("");
-      }
-
+    function ValidationDate(datestart, dateend) {
+     if (datestart > dateend) {
+      alert("Chọn ngày không hợp lệ.");
+      $('#dateend').val("");
     }
 
-    $('#datestart').bind('change', function() {
-      var datestart = $('#datestart').val();
-      var dateend = $('#dateend').val();
+  }
+
+  $('#datestart').bind('change', function() {
+    var datestart = $('#datestart').val();
+    var dateend = $('#dateend').val();
 
 
 
-      if (datestart != "" && dateend != "") {
-        ValidationDate(datestart, dateend);          
-      }
+    if (datestart != "" && dateend != "") {
+      ValidationDate(datestart, dateend);          
+    }
 
 
-    });
+  });
 
-    $('#dateend').bind('change', function() {
-      var datestart = $('#datestart').val();
-      var dateend = $('#dateend').val();
+  $('#dateend').bind('change', function() {
+    var datestart = $('#datestart').val();
+    var dateend = $('#dateend').val();
 
-      if (datestart != "" && dateend != "") {
-        ValidationDate(datestart, dateend);
-      }
+    if (datestart != "" && dateend != "") {
+      ValidationDate(datestart, dateend);
+    }
 
-    });
+  });
 
-    $('.price').each(function( index ) {
+  $('.price').each(function( index ) {
 
-      var priceR = parseInt($(this).text()).toString();;
+    var priceR = parseInt($(this).text()).toString();;
 
-      var formatprice = FormatNumber(priceR) + ' VNĐ / Ngày';
+    var formatprice = FormatNumber(priceR) + ' VNĐ / Ngày';
 
-      $(this).text(formatprice);
+    $(this).text(formatprice);
 
-    });
+  });
 
 
 
-    var price = $('#price').val();
-    $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ / Ngày');
+  var price = $('#price').val();
+  $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ / Ngày');
 
 
       // $('#datestart').datepicker();

@@ -8,6 +8,7 @@
  <meta name="description" content="">
  <meta name="author" content="">
  <link rel="icon" href="Images/logo.ico">
+ <link href="lightbox2-master/src/css/lightbox.css" rel="stylesheet">
 
  <title>Chi tiết</title>
 
@@ -57,10 +58,16 @@
  $kqR = mysqli_query($conn,$lenhR);
  $row = mysqli_fetch_row($kqR);
 
- $lenhRLQ = "SELECT rooms.ID, rooms.Name, rooms.Price, images.Name as ImageName from rooms join (SELECT name, RoomID FROM images GROUP by RoomID) as Images on rooms.ID = images.RoomID where rooms.CategoryID = ".$row[7]." and rooms.Price >= ".$row[3];
+ $lenhRLQ = "SELECT rooms.ID, rooms.Name, rooms.Price, images.Name as ImageName from rooms join (SELECT name, RoomID FROM images GROUP by RoomID) as Images on rooms.ID = images.RoomID where rooms.CategoryID like \"%$row[7]%\"and rooms.Price >= ".$row[3]." AND roomID != ".$id;
 
  $kqRLQ = mysqli_query($conn,$lenhRLQ);
- $rowRLQ = mysqli_fetch_row($kqRLQ);
+
+ $lenhA = "SELECT Name FROM images where roomID = ".$id;
+ $kqlenhA = mysqli_query($conn,$lenhA);
+
+
+
+
 
  ?>
 
@@ -94,7 +101,7 @@
 <div class="container">
 
   <div class="row">
-   <div class="col-md-2"  style="margin-top: 97px">
+   <div class="col-md-3"  style="margin-top: 97px">
 
     <!-- Search Widget -->
 
@@ -102,14 +109,31 @@
     <!-- Side Widget -->
     <div class="card my-4">
       <h6 class="card-header">Phòng tương tự</h6>
-      <div class="card-body">
+      
+        <?php 
+        if (mysqli_num_rows($kqRLQ) > 0) {
+          while($rowRLQ = mysqli_fetch_array($kqRLQ))
+          {
+            ?>
+            <a href="<?php echo "detail.php?id=" .$rowRLQ[0]; ?>" class="list-group-item" style="text-align: center;">
+              
+              <img style = "width:150px" src="Images/<?php echo $rowRLQ[3]; ?>">
+              <h5 class="list-group-item-heading"><?php echo $rowRLQ[1]; ?></h5>
+              <p> Giá: <span class="price"><?php echo $rowRLQ[2] ; ?></span></p>
+            </a>
 
-      </div>
+           
+            <?php
+          }
+        }
+
+        ?>
+      
     </div>
 
   </div>
   <!-- Post Content Column -->
-  <div class="col-lg-10">
+  <div class="col-lg-9">
 
     <h1 class="my-4"><?php echo $row[1]; ?></h1>
     <hr>
@@ -119,8 +143,22 @@
 
       <div class="col-lg-8">
         <img class="img-fluid" src="Images/<?php echo $row[4]; ?>" alt="">
-      </div>
+        <hr>
+        <?php 
+        if (mysqli_num_rows($kqlenhA) > 0) {
+          while($rowlenhA = mysqli_fetch_array($kqlenhA))
+          {
+            ?>
+            
+              
+             <a href="Images/<?php echo $rowlenhA[0]; ?>" data-lightbox="roadtrip"><img style = "width:150px; margin-left: 5px;"  src="Images/<?php echo $rowlenhA[0]; ?>"></a>
 
+            <?php
+          }
+        }
+
+        ?>
+      </div>
 
       <div class="col-lg-4">
         <form action="booking.php" method="POST">
@@ -192,218 +230,220 @@
   <br>
   <br>
   <br>
+</div>
+<!-- /.container -->
+<footer class="py-5 bg-dark">
+  <div class="container">
+    <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+  </div>
   <!-- /.container -->
-  <footer class="py-5 bg-dark">
-    <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
-    </div>
-    <!-- /.container -->
-  </footer>
+</footer>
 
-  <!-- Footer -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/popper/popper.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!-- Footer -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/popper/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-  <!-- datepicker -->
-  <script src="vendor/bootstrap/js/bootstrap-datepicker.js"></script>
+<!-- datepicker -->
+<script src="vendor/bootstrap/js/bootstrap-datepicker.js"></script>
 
 
-  <script type="text/javascript">
+<script type="text/javascript">
 
-    if ($('#datestart').val() == "" || $('#dateend').val() == "" ) {
-      $('#hiddentotal').val(0);
-    }else{
+  if ($('#datestart').val() == "" || $('#dateend').val() == "" ) {
+    $('#hiddentotal').val(0);
+  }else{
 
-      var total = CalculateTotal($('#datestart').val(), $('#dateend').val(), $('#hiddenprice').val());
+    var total = CalculateTotal($('#datestart').val(), $('#dateend').val(), $('#hiddenprice').val());
 
-      $('#hiddentotal').val(total);
+    $('#hiddentotal').val(total);
 
-      $('#total').text(FormatNumber(total.toString()) + ' VNĐ / ' + DiffDate($('#datestart').val(), $('#dateend').val()) + ' Ngày');
+    $('#total').text(FormatNumber(total.toString()) + ' VNĐ / ' + DiffDate($('#datestart').val(), $('#dateend').val()) + ' Ngày');
 
-      var roomID = $('#roomID').val();
-      CheckDuplicateDate($('#datestart').val(), $('#dateend').val(),roomID);
-    }
+    var roomID = $('#roomID').val();
+    CheckDuplicateDate($('#datestart').val(), $('#dateend').val(),roomID);
+  }
 
 
-    function CheckDuplicateDate(datestart, dateend,roomID) {
+  function CheckDuplicateDate(datestart, dateend,roomID) {
 
-      $.ajax({
-        url: 'checkduplicatedate.php',
-        type: 'POST',
-        dataType: 'json',
-        data: {roomID: roomID,
-          checkindate: datestart,
-          checkoutdate: dateend
+    $.ajax({
+      url: 'checkduplicatedate.php',
+      type: 'POST',
+      dataType: 'json',
+      data: {roomID: roomID,
+        checkindate: datestart,
+        checkoutdate: dateend
 
-        },
-        success: function(response) {
-          if (response.isExist) {
+      },
+      success: function(response) {
+        if (response.isExist) {
 
-            $('#checkduplicatedate-message').css('display','inline');
-            $('#dateend').val("");
-            $('#hiddentotal').val(0);
-            $('#total').text("");
-          }else{
-            $('#checkduplicatedate-message').css('display','none');
-          }
+          $('#checkduplicatedate-message').css('display','inline');
+          $('#dateend').val("");
+          $('#hiddentotal').val(0);
+          $('#total').text("");
+        }else{
+          $('#checkduplicatedate-message').css('display','none');
         }
-      });
+      }
+    });
 
 
-
-    }
-
-    function DiffDate(datestart, dateend) {
-
-      datestart = new Date(datestart);
-      dateend = new Date(dateend);
-
-      var diff = (dateend - datestart)/1000;
-      var diff = Math.abs(Math.floor(diff));
-
-      var result = Math.floor(diff/(24*60*60));
-
-      return result;
-      
-
-    }
-
-    function CalculateTotal(datestart, dateend, price){ 
-      var dateleft = DiffDate(datestart, dateend);
-      var total = dateleft * price;
-
-      return total;
-    }
-
-    function ValidationDate(datestart, dateend) {
-     if (datestart > dateend) {
-      alert("Chọn ngày không hợp lệ.");
-      $('#dateend').val("");
-    }else{
-      var roomID = $('#roomID').val();
-      CheckDuplicateDate(datestart, dateend,roomID);
-    }
 
   }
 
-  $('#datestart').bind('change', function() {
-    var datestart = $('#datestart').val();
-    var dateend = $('#dateend').val();
-    var price = $('#hiddenprice').val();
+  function DiffDate(datestart, dateend) {
 
-    if (datestart != "" && dateend != "") {
-      ValidationDate(datestart, dateend); 
+    datestart = new Date(datestart);
+    dateend = new Date(dateend);
 
-      $('#hiddentotal').val(CalculateTotal(datestart, dateend, price));
-      $('#total').text(FormatNumber(CalculateTotal(datestart, dateend, price).toString()) + ' VNĐ / ' + DiffDate($('#datestart').val(), $('#dateend').val()) + ' Ngày');
+    var diff = (dateend - datestart)/1000;
+    var diff = Math.abs(Math.floor(diff));
 
+    var result = Math.floor(diff/(24*60*60));
 
-
-    }
+    return result;
 
 
-  });
-
-  $('#dateend').bind('change', function() {
-    var datestart = $('#datestart').val();
-    var dateend = $('#dateend').val();
-    var price = $('#hiddenprice').val();
-
-    if (datestart != "" && dateend != "") {
-      ValidationDate(datestart, dateend);
-
-      $('#hiddentotal').val(CalculateTotal(datestart, dateend, price));
-
-
-
-      $('#total').text(FormatNumber(CalculateTotal(datestart, dateend, price).toString()) + ' VNĐ / ' + DiffDate($('#datestart').val(), $('#dateend').val()) + ' Ngày');
-
-    }
-
-  });
-
-  $('.price').each(function( index ) {
-
-    var priceR = parseInt($(this).text()).toString();
-
-    var formatprice = FormatNumber(priceR) + ' VNĐ / Ngày';
-
-    $(this).text(formatprice);
-
-  });
-
-
-  function FormatNumber(str) {
-    var strTemp = GetNumber(str);
-    if (strTemp.length <= 3)
-      return strTemp;
-    strResult = "";
-    for (var i = 0; i < strTemp.length; i++)
-      strTemp = strTemp.replace(",", "");
-    var m = strTemp.lastIndexOf(".");
-    if (m == -1) {
-      for (var i = strTemp.length; i >= 0; i--) {
-        if (strResult.length > 0 && (strTemp.length - i - 1) % 3 == 0)
-          strResult = "," + strResult;
-        strResult = strTemp.substring(i, i + 1) + strResult;
-      }
-    } else {
-      var strphannguyen = strTemp.substring(0, strTemp.lastIndexOf("."));
-      var strphanthapphan = strTemp.substring(strTemp.lastIndexOf("."),
-        strTemp.length);
-      var tam = 0;
-      for (var i = strphannguyen.length; i >= 0; i--) {
-
-        if (strResult.length > 0 && tam == 4) {
-          strResult = "," + strResult;
-          tam = 1;
-        }
-
-        strResult = strphannguyen.substring(i, i + 1) + strResult;
-        tam = tam + 1;
-      }
-      strResult = strResult + strphanthapphan;
-    }
-    return strResult;
   }
 
-  function GetNumber(str) {
-    var count = 0;
-    for (var i = 0; i < str.length; i++) {
-      var temp = str.substring(i, i + 1);
-      if (!(temp == "," || temp == "." || (temp >= 0 && temp <= 9))) {
-        alert(inputnumber);
-        return str.substring(0, i);
-      }
-      if (temp == " ")
-        return str.substring(0, i);
-      if (temp == ".") {
-        if (count > 0)
-          return str.substring(0, ipubl_date);
-        count++;
-      }
-    }
-    return str;
+  function CalculateTotal(datestart, dateend, price){ 
+    var dateleft = DiffDate(datestart, dateend);
+    var total = dateleft * price;
+
+    return total;
   }
 
-  function IsNumberInt(str) {
-    for (var i = 0; i < str.length; i++) {
-      var temp = str.substring(i, i + 1);
-      if (!(temp == "." || (temp >= 0 && temp <= 9))) {
-        alert(inputnumber);
-        return str.substring(0, i);
-      }
-      if (temp == ",") {
-        return str.substring(0, i);
-      }
-    }
-    return str;
+  function ValidationDate(datestart, dateend) {
+   if (datestart > dateend) {
+    alert("Chọn ngày không hợp lệ.");
+    $('#dateend').val("");
+  }else{
+    var roomID = $('#roomID').val();
+    CheckDuplicateDate(datestart, dateend,roomID);
+
+
+    $('#hiddentotal').val(CalculateTotal(datestart, dateend, $('#hiddenprice').val()));
+    $('#total').text(FormatNumber(CalculateTotal(datestart, dateend, $('#hiddenprice').val()).toString()) + ' VNĐ / ' + DiffDate($('#datestart').val(), $('#dateend').val()) + ' Ngày');
   }
+
+}
+
+$('#datestart').bind('change', function() {
+  var datestart = $('#datestart').val();
+  var dateend = $('#dateend').val();
+  var price = $('#hiddenprice').val();
+
+  if (datestart != "" && dateend != "") {
+    ValidationDate(datestart, dateend); 
+
+    // $('#hiddentotal').val(CalculateTotal(datestart, dateend, price));
+    // $('#total').text(FormatNumber(CalculateTotal(datestart, dateend, price).toString()) + ' VNĐ / ' + DiffDate($('#datestart').val(), $('#dateend').val()) + ' Ngày');
+
+
+
+  }
+
+
+});
+
+$('#dateend').bind('change', function() {
+  var datestart = $('#datestart').val();
+  var dateend = $('#dateend').val();
+  var price = $('#hiddenprice').val();
+
+  if (datestart != "" && dateend != "") {
+    ValidationDate(datestart, dateend);
+
+    // $('#hiddentotal').val(CalculateTotal(datestart, dateend, price));
+    // $('#total').text(FormatNumber(CalculateTotal(datestart, dateend, price).toString()) + ' VNĐ / ' + DiffDate($('#datestart').val(), $('#dateend').val()) + ' Ngày');
+
+  }
+
+});
+
+$('.price').each(function( index ) {
+
+  var priceR = parseInt($(this).text()).toString();
+
+  var formatprice = FormatNumber(priceR) + ' VNĐ / Ngày';
+
+  $(this).text(formatprice);
+
+});
+
+
+function FormatNumber(str) {
+  var strTemp = GetNumber(str);
+  if (strTemp.length <= 3)
+    return strTemp;
+  strResult = "";
+  for (var i = 0; i < strTemp.length; i++)
+    strTemp = strTemp.replace(",", "");
+  var m = strTemp.lastIndexOf(".");
+  if (m == -1) {
+    for (var i = strTemp.length; i >= 0; i--) {
+      if (strResult.length > 0 && (strTemp.length - i - 1) % 3 == 0)
+        strResult = "," + strResult;
+      strResult = strTemp.substring(i, i + 1) + strResult;
+    }
+  } else {
+    var strphannguyen = strTemp.substring(0, strTemp.lastIndexOf("."));
+    var strphanthapphan = strTemp.substring(strTemp.lastIndexOf("."),
+      strTemp.length);
+    var tam = 0;
+    for (var i = strphannguyen.length; i >= 0; i--) {
+
+      if (strResult.length > 0 && tam == 4) {
+        strResult = "," + strResult;
+        tam = 1;
+      }
+
+      strResult = strphannguyen.substring(i, i + 1) + strResult;
+      tam = tam + 1;
+    }
+    strResult = strResult + strphanthapphan;
+  }
+  return strResult;
+}
+
+function GetNumber(str) {
+  var count = 0;
+  for (var i = 0; i < str.length; i++) {
+    var temp = str.substring(i, i + 1);
+    if (!(temp == "," || temp == "." || (temp >= 0 && temp <= 9))) {
+      alert(inputnumber);
+      return str.substring(0, i);
+    }
+    if (temp == " ")
+      return str.substring(0, i);
+    if (temp == ".") {
+      if (count > 0)
+        return str.substring(0, ipubl_date);
+      count++;
+    }
+  }
+  return str;
+}
+
+function IsNumberInt(str) {
+  for (var i = 0; i < str.length; i++) {
+    var temp = str.substring(i, i + 1);
+    if (!(temp == "." || (temp >= 0 && temp <= 9))) {
+      alert(inputnumber);
+      return str.substring(0, i);
+    }
+    if (temp == ",") {
+      return str.substring(0, i);
+    }
+  }
+  return str;
+}
 
 
 </script>
-
+<script src="lightbox2-master/src/js/lightbox.js" type="text/javascript"></script>
 </body>
 
 </html>

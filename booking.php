@@ -1,4 +1,5 @@
 <?php 
+  include("connection.php");
 
 if (isset($_POST['booking'])) {
 
@@ -19,7 +20,11 @@ if (isset($_POST['booking'])) {
 
   $result = mysqli_query($conn,$lenhbooking);
 
-
+  if ($result) {
+   header('Location:thankyou.php');
+  }else {
+    header('Location:index.php');
+  }
 
 }
 
