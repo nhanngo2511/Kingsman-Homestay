@@ -7,7 +7,9 @@
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  <meta name="description" content="">
  <meta name="author" content="">
- <link rel="icon" href="Images/logo.ico">
+ <link rel="icon" href="admin/images/logo.ico">
+ <link rel="stylesheet" href="assets/css/Footer-with-button-logo.css">
+ <link rel="stylesheet" href="vendor/bootstrap/font-awesome/css/font-awesome.min.css">
  <link href="lightbox2-master/src/css/lightbox.css" rel="stylesheet">
 
  <title>Chi tiết</title>
@@ -74,22 +76,22 @@
  <!-- Navigation -->
  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
   <div class="container">
-    <a class="navbar-brand" href="index.php"><img src="Images/logo.png" alt="logo" style="width: 35px"> Kingsman Homestay</a>
+    <a class="navbar-brand" href="index.php"><img class="spin" src="admin/images/logo.png" alt="logo" style="width: 35px"> Kingsman Homestay</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="index.php">Trang chủ
-            <span class="sr-only">(current)</span>
+
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Giới thiệu</a>
+          <a class="nav-link" href="introduce.php">Giới thiệu</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Liên hệ</a>
+          <a class="nav-link" href="contact.php">Liên hệ</a>
         </li>
 
       </ul>
@@ -110,24 +112,24 @@
     <div class="card my-4">
       <h6 class="card-header">Phòng tương tự</h6>
       
-        <?php 
-        if (mysqli_num_rows($kqRLQ) > 0) {
-          while($rowRLQ = mysqli_fetch_array($kqRLQ))
-          {
-            ?>
-            <a href="<?php echo "detail.php?id=" .$rowRLQ[0]; ?>" class="list-group-item" style="text-align: center;">
-              
-              <img style = "width:150px" src="Images/<?php echo $rowRLQ[3]; ?>">
-              <h5 class="list-group-item-heading"><?php echo $rowRLQ[1]; ?></h5>
-              <p> Giá: <span class="price"><?php echo $rowRLQ[2] ; ?></span></p>
-            </a>
+      <?php 
+      if (mysqli_num_rows($kqRLQ) > 0) {
+        while($rowRLQ = mysqli_fetch_array($kqRLQ))
+        {
+          ?>
+          <a href="<?php echo "detail.php?id=" .$rowRLQ[0]; ?>" class="list-group-item" style="text-align: center;">
 
-           
-            <?php
-          }
+            <img style = "width:150px" src="admin/images/<?php echo $rowRLQ[3]; ?>">
+            <h5 class="list-group-item-heading"><?php echo $rowRLQ[1]; ?></h5>
+            <p> Giá: <span class="price"><?php echo $rowRLQ[2] ; ?></span></p>
+          </a>
+
+
+          <?php
         }
+      }
 
-        ?>
+      ?>
       
     </div>
 
@@ -142,7 +144,7 @@
     <div class="row">
 
       <div class="col-lg-8">
-        <img class="img-fluid" src="Images/<?php echo $row[4]; ?>" alt="">
+        <img class="img-fluid" src="admin/images/<?php echo $row[4]; ?>" alt="">
         <hr>
         <?php 
         if (mysqli_num_rows($kqlenhA) > 0) {
@@ -150,8 +152,8 @@
           {
             ?>
             
-              
-             <a href="Images/<?php echo $rowlenhA[0]; ?>" data-lightbox="roadtrip"><img style = "width:150px; margin-left: 5px;"  src="Images/<?php echo $rowlenhA[0]; ?>"></a>
+
+            <a href="admin/images/<?php echo $rowlenhA[0]; ?>" data-lightbox="roadtrip"><img style = "width:150px; margin-left: 5px;"  src="admin/images/<?php echo $rowlenhA[0]; ?>"></a>
 
             <?php
           }
@@ -232,12 +234,38 @@
   <br>
 </div>
 <!-- /.container -->
-<footer class="py-5 bg-dark">
-  <div class="container">
-    <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
-  </div>
-  <!-- /.container -->
-</footer>
+<footer id="myFooter">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3">
+          <img class="spin" src="admin/images/logo.png" style="width: 130px">
+        </div>
+        <div class="col-sm-2">
+           <h6>Kingsman Homestay</h6>
+          <ul>
+            <li><a href="#">Trang chủ</a></li>
+            <li><a href="introduce.php">Giới thiệu</a></li>
+            <li><a href="contact.php">Liên hệ</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-4">
+          <div id="googleMap" style="width:100%;height:100%;"></div>
+
+        </div>
+
+        <div class="col-sm-3">
+          <div class="social-networks">
+            <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+            <a href="#" class="google"><i class="fa fa-google-plus"></i></a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <p>© 2016 Copyright Text </p>
+    </div>
+  </footer>
 
 <!-- Footer -->
 <script src="vendor/jquery/jquery.min.js"></script>
@@ -249,6 +277,20 @@
 
 
 <script type="text/javascript">
+
+  function myMap() {
+      var mapProp= {
+        center:new google.maps.LatLng(10.762996, 106.693339),
+        zoom:15,
+
+      };
+      var mapPin = " http://www.google.com/mapfiles/marker.png";
+      var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+      var Marker = new google.maps.Marker({
+       map: map,
+       position: map.getCenter()
+     });
+    }
 
   if ($('#datestart').val() == "" || $('#dateend').val() == "" ) {
     $('#hiddentotal').val(0);
@@ -444,6 +486,7 @@ function IsNumberInt(str) {
 
 </script>
 <script src="lightbox2-master/src/js/lightbox.js" type="text/javascript"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCiYH432QkKr8PSPO44k6xsMbbJvHjIZ_8&callback=myMap"></script>
 </body>
 
 </html>

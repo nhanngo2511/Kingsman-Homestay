@@ -1,19 +1,31 @@
+
+.spin {
+	border-radius: 50%;
+	-webkit-transition: -webkit-transform .8s ease-in-out;
+	transition:         transform .8s ease-in-out;
+}
+.spin:hover {
+	-webkit-transform: rotate(360deg);
+	transform: rotate(360deg);
+}
+
 .truncate-text{
 	overflow: hidden;
-    -ms-text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
-    text-overflow: ellipsis;
-    display: block;
+	-ms-text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	display: block;
 }
 
 body {
-    padding-top: 54px;
+	padding-top: 54px;
 }
 
 @media (min-width: 992px) {
-    body {
-        padding-top: 56px;
-    }
+	body {
+		padding-top: 56px;
+	}
 }
+
 
 

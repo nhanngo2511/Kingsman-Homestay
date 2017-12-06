@@ -7,7 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <link rel="icon" href="Images/logo.ico">
+  <link rel="icon" href="admin/images/logo.ico">
+  <link rel="stylesheet" href="assets/css/Footer-with-button-logo.css">
+  <link rel="stylesheet" href="vendor/bootstrap/font-awesome/css/font-awesome.min.css">
   <title>Tìm kiếm</title>
   <!-- Slider -->
 
@@ -76,7 +78,7 @@
 
 
   // paging
-  $sodong = 1;
+  $sodong = 6;
   if(!isset($_GET["p"]))
     $p = 1;
   else
@@ -122,22 +124,22 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
    <div class="container">
-    <a class="navbar-brand" href="index.php"><img src="Images/logo.png" alt="logo" style="width: 35px"> Kingsman Homestay</a>
+    <a class="navbar-brand" href="index.php"><img class="spin" src="admin/images/logo.png" alt="logo" style="width: 35px"> Kingsman Homestay</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="index.php">Trang chủ
-            <span class="sr-only">(current)</span>
+           
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Giới thiệu</a>
+          <a class="nav-link" href="introduce.php">Giới thiệu</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Liên hệ</a>
+          <a class="nav-link" href="contact.php">Liên hệ</a>
         </li>
 
       </ul>
@@ -234,7 +236,7 @@
           ?>
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <a href="<?php echo "detail.php?id=" .$rowP[0]; ?>"><img style =" height: 130px" class="card-img-top" src="Images/<?php echo $rowP[4]; ?>" alt=""></a>
+              <a href="<?php echo "detail.php?id=" .$rowP[0]; ?>"><img style =" height: 130px" class="card-img-top" src="admin/images/<?php echo $rowP[4]; ?>" alt=""></a>
               <div class="card-body" style="text-align: center;">
                 <h4 class="card-title">
                   <a href="<?php echo "detail.php?id=" .$rowP[0]; ?>"><?php echo $rowP[1]; ?></a>
@@ -245,8 +247,8 @@
                   <?php echo $rowP[2]; ?>
                 </p>
               </div>
-              <div class="card-footer">
-                <h6>Giá: <span class="price"> <?php echo $rowP[3]; ?></span></h6> 
+              <div class="card-footer" style="text-align: center;">
+                <h6><span class="price"> <?php echo $rowP[3]; ?></span></h6> 
                 <hr>
                 <a class='btn btn-success btn-block' href="detail.php?id=<?php echo $rowP[0]; ?>">Xem chi tiết</a>
                 <!-- <input type='submit' name='add_to_cart' class='btn btn-success' value='Thêm vào giỏ hàng'>  -->
@@ -306,12 +308,38 @@
 <!-- /.container -->
 </div>
 <!-- Footer -->
-<footer class="py-5 bg-dark">
-  <div class="container">
-    <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
-  </div>
-  <!-- /.container -->
-</footer>
+<footer id="myFooter">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3">
+          <img class="spin" src="admin/images/logo.png" style="width: 130px">
+        </div>
+        <div class="col-sm-2">
+           <h6>Kingsman Homestay</h6>
+          <ul>
+            <li><a href="#">Trang chủ</a></li>
+            <li><a href="introduce.php">Giới thiệu</a></li>
+            <li><a href="contact.php">Liên hệ</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-4">
+          <div id="googleMap" style="width:100%;height:100%;"></div>
+
+        </div>
+
+        <div class="col-sm-3">
+          <div class="social-networks">
+            <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+            <a href="#" class="google"><i class="fa fa-google-plus"></i></a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <p>© 2016 Copyright Text </p>
+    </div>
+  </footer>
 
 <!-- Bootstrap core JavaScript -->
 <script src="vendor/jquery/jquery.min.js"></script>
@@ -323,6 +351,20 @@
 
 
 <script type="text/javascript">
+
+  function myMap() {
+      var mapProp= {
+        center:new google.maps.LatLng(10.762996, 106.693339),
+        zoom:15,
+
+      };
+      var mapPin = " http://www.google.com/mapfiles/marker.png";
+      var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+      var Marker = new google.maps.Marker({
+       map: map,
+       position: map.getCenter()
+     });
+    }
 
   function ValidationDate(datestart, dateend) {
    if (datestart > dateend) {
@@ -449,6 +491,7 @@ $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ / Ngày');
 
 
   </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCiYH432QkKr8PSPO44k6xsMbbJvHjIZ_8&callback=myMap"></script>
 
 </body>
 
