@@ -25,12 +25,11 @@ $lenh = "SELECT COUNT(orders.ID) AS rows
   WHERE orders.RoomID = '$roomID' AND
   ((\"$formatcheckindate\" < orders.CheckInDate AND \"$formatcheckoutdate\" < orders.CheckInDate) OR (\"$formatcheckindate\" > orders.CheckOutDate AND \"$formatcheckoutdate\" > orders.CheckOutDate))";
 
-  echo $lenh;
-
-
 
 $kq = mysqli_query($conn,$lenh);
 $data=mysqli_fetch_assoc($kq);
+
+echo $lenh;
 
 if ($data["rows"] == 0 ) {
   $return = array('isExist' => true);

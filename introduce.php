@@ -97,7 +97,7 @@
     <h3 class="margin">Giới thiệu</h3>
     <p>Nằm tại Thành phố Hồ Chí Minh và cách Công viên 23 tháng 9 chỉ 650m, Kingsman Homestay cung cấp chỗ nghỉ với nước uống miễn phí cho tất cả khách lưu trú.</p>
     <p>Một số phòng đi kèm khu vực tiếp khách để quý khách thư giãn sau một ngày bận rộn. Vài phòng còn có sân hiên/ban công. Phòng tắm riêng của các phòng có dép, máy sấy tóc và đồ vệ sinh cá nhân miễn phí</p>
-    <p>Nhà nghỉ chỉ phục vụ bữa sáng này cũng có dịch vụ cho thuê xe hai bánh. Bảo tàng Mỹ thuật nằm trong bán kính 1km từ Supe Homestay trong khi Chợ Bến Thành cách chỗ nghỉ 1,1km. Sân bay Quốc tế Tân Sơn Nhất cách chỗ nghỉ 8km. </p>
+    <p>Nhà nghỉ chỉ phục vụ bữa sáng này cũng có dịch vụ cho thuê xe hai bánh. Bảo tàng Mỹ thuật nằm trong bán kính 1km từ Kingsman Homestay trong khi Chợ Bến Thành cách chỗ nghỉ 1,1km. Sân bay Quốc tế Tân Sơn Nhất cách chỗ nghỉ 8km. </p>
     <p>Quận 1 là lựa chọn tuyệt vời cho du khách thích hoạt động giải trí về đêm, chợ và bảo tàng.</p>
     <p>Đây là khu vực ở TP. Hồ Chí Minh mà khách yêu thích, theo các đánh giá độc lập.</p>
     <p>Chỗ nghỉ này cũng được đánh giá là đáng giá tiền nhất ở TP. Hồ Chí Minh! Khách sẽ tiết kiệm được nhiều hơn so với nghỉ tại những chỗ nghỉ khác ở thành phố này.</p>
