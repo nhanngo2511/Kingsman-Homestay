@@ -1,5 +1,6 @@
 <?php
-include("connection.php");
+include("connection.php");include("checklogin.php");
+CheckLogin();
 $ten = mysqli_real_escape_string($conn, $_REQUEST['ten']);
 $mota = mysqli_real_escape_string($conn, $_REQUEST['mota']);
 $tienichphong = mysqli_real_escape_string($conn, $_REQUEST['tienichphong']);

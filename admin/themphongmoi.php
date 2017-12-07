@@ -1,5 +1,7 @@
 <?php
 include("connection.php");
+include("checklogin.php");
+CheckLogin();
 $name = mysqli_real_escape_string($conn, $_REQUEST['nameP']);
 $sql = "insert into categories (ID,Name) VALUES ('', '$name')";
 

@@ -313,7 +313,6 @@
     today = yyyy + '-' + mm + '-' + dd;
 
     return today;
-
   }
 
 

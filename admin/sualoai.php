@@ -1,5 +1,7 @@
 <?php
 include("connection.php");
+include("checklogin.php");
+CheckLogin();
 $id = @$_GET['id'];
 $lenh = "select * from categories where ID='$id'";
 $kq = mysqli_query($conn,$lenh);

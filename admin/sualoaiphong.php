@@ -1,5 +1,7 @@
 <?php
 include("connection.php");
+include("checklogin.php");
+CheckLogin();
 $id =  mysqli_real_escape_string($conn, $_REQUEST['id']);
 $name = mysqli_real_escape_string($conn, $_REQUEST['nameP']);
 $sql = "update categories set Name='$name' where ID=$id";

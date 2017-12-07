@@ -1,5 +1,7 @@
 <?php
 include("connection.php");
+include("checklogin.php");
+CheckLogin();
 $lenh = "select * from rooms";
 $kq = mysqli_query($conn,$lenh);
 ?>
