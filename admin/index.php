@@ -19,7 +19,7 @@ $Nphong= mysqli_num_rows($kqphong);
 
 $kqdonhang = mysqli_query($conn,$lenhdonhang);
 $Ndonhang= mysqli_num_rows($kqdonhang);
- ?>
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,6 +47,8 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
 
     <!-- Custom Fonts -->
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -100,18 +102,18 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
                             <div class="input-group custom-search-form">
                                 <input type="text" class="form-control" placeholder="Search...">
                                 <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
                             </div>
                             <!-- /input-group -->
                         </li>
 
-						<li>
+                        <li>
                             <a href="index.php" class="active"><i class="fa fa-tachometer fa-fw"></i> Dashboard</a>
                         </li>
-						<li>
+                        <li>
                             <a href="loaiphong.php"><i class="fa fa-bed fa-fw"></i> Loại phòng</a>
                         </li>
                         <li>
@@ -204,7 +206,13 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-6">
+                    <canvas id="line-chartcanvas"></canvas>
+                </div>
+            </div>
         </div>
+        
         <!-- /#page-wrapper -->
 
     </div>
@@ -223,9 +231,64 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
     <script src="vendor/raphael/raphael.min.js"></script>
     <script src="vendor/morrisjs/morris.min.js"></script>
     <script src="data/morris-data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" ></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="dist/js/sb-admin-2.js"></script>
+    <script src="https://codepen.io/anon/pen/aWapBE.js"></script>
+
+    <script>
+
+        roomchart();
+
+        function roomchart() {
+            $.ajax({
+              url: 'getcountroombyorder.php',
+              type: 'GET',
+              dataType: 'json',
+
+              success: function(data) {
+
+
+                var score = {
+                    roomname: [],
+                    roomcount:[]
+                };
+
+                var datalength = data.length;
+
+                for (var i = 0; i < datalength; i++) {
+                    score.roomname.push(data[i].Name);
+                    score.roomcount.push(data[i].roomcount);
+                }
+
+                var char = new Chart($('#line-chartcanvas'), {
+                    type:'bar',
+                    data:{
+                        labels: score.roomname,
+                        datasets:[{
+                            label:'lượng đặt phòng',
+                            data:score.roomcount,
+                            backgroundColor: palette('tol',datalength).map(function(hex) {
+                                return '#' + hex;
+                            }
+                            )
+                        }]
+                    },
+                    option:{
+
+                       legend:{
+                        display:false
+                    }    
+                }
+
+            });
+
+            }
+        });
+
+        }
+    </script>
 
 </body>
 
