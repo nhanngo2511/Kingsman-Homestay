@@ -229,15 +229,6 @@ $kq = mysqli_query($conn,$lenh);
                 }
           echo "</select>
           </div>
-          <div class='form-group'>
-            <label>Trạng thái</label>
-            <select class='form-control' name='trangthai'>
-              <option value='1'>Chưa nhận phòng</option>
-              <option value='2'>Đã nhận phòng</option>
-              <option value='3'>Đã thanh toán</option>
-              <option value='4'>Đã huỷ</option>
-            </select>
-          </div>
         </div>
         <div class='col-sm-6'>
           <div class='form-group'>

@@ -28,14 +28,28 @@ while($row = mysqli_fetch_row($kq))
         break;
     }
   }
-$sql1 = "update orders set Status='$status' where ID=$id";
-    if(mysqli_query($conn, $sql1)){
-      header('Location:donhang.php');
-              exit();
-    } else{
+  $sql2 = "select CheckInDate from orders where ID=$id";
+  $kq2 = mysqli_query($conn, $sql2);
+  while($row3 = mysqli_fetch_row($kq2))
+    {
+      $checking = date("d-m-Y", strtotime($row3[0]));
+      $nowday = date('d-m-Y');
+      if ($checking==$nowday) {
+        $sql1 = "update orders set Status='$status' where ID=$id";
+            if(mysqli_query($conn, $sql1)){
+              header('Location:donhang.php');
+                      exit();
+            } else{
 
-        echo "Khong the thuc thi cau lenh $sql. " . mysqli_error($conn);
+                echo "Khong the thuc thi cau lenh $sql. " . mysqli_error($conn);
 
+            }
+      }
+      else {
+        header('Location:donhang.php');
+                exit();
+      }
     }
+
     mysqli_close($conn);
  ?>

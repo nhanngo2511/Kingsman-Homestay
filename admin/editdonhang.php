@@ -13,14 +13,13 @@ include("connection.php");
    $date1=date_create($ngayden);
    $date2=date_create($ngaydi);
    $diff = date_diff($date1,$date2)->format("%R%a");
-   $trangthai = mysqli_real_escape_string($conn, $_REQUEST['trangthai']);
    $sqlprice = "select Price from rooms where ID='$loaiphong'";
    $kq = mysqli_query($conn, $sqlprice);
    while($row = mysqli_fetch_row($kq)){
     $tongtien = $row[0]*$diff;
    }
    $sql = "update orders
-   set CustomerIdentifyNumber='$cmnn',CustomerName='$hoten', CustomerPhone='$sdt', CustomerAddress='$diachi', RoomID='$loaiphong', CheckInDate='$ngayden', CheckOutDate='$ngaydi', Total='$tongtien', Note='$ghichu', NumberOfCall='$goi', Status='$trangthai'
+   set CustomerIdentifyNumber='$cmnn',CustomerName='$hoten', CustomerPhone='$sdt', CustomerAddress='$diachi', RoomID='$loaiphong', CheckInDate='$ngayden', CheckOutDate='$ngaydi', Total='$tongtien', Note='$ghichu', NumberOfCall='$goi'
    where ID='$id'";
 
    if(mysqli_query($conn, $sql)){

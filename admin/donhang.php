@@ -238,7 +238,7 @@ input:checked + .slider:before {
               <th>Khách hàng</th>
               <th>Phòng</th>
               <th style="width: 200">Thu tiền</th>
-              <th>Trạng thái</th>         
+              <th>Trạng thái</th>
               <th>Thao tác</th>
               <th></th>
             </tr>
@@ -253,19 +253,19 @@ input:checked + .slider:before {
               if ($row[11]==1) {
                 echo "<hr style='background-color: #808080; height: 1px; border: 0;'>  <a href='xoadonhang.php?id=$row[0]'
                 class='btn btn-danger btn-sm' id='xoa' onclick='Xoa()' data-toggle='tooltip' title='Huỷ đơn hàng'><span
-                class='glyphicon glyphicon-remove-circle'></span> Hủy đơn hàng 
+                class='glyphicon glyphicon-remove-circle'></span> Hủy đơn hàng
                 </a>
-                
+
                 ";
               }
               echo "</td>
-              <td><strong>Tên: </strong> $row[2] <br> <strong>SĐT: </strong>$row[3]<br><strong>Địa chỉ: </strong>$row[3] <br> <strong>CMND: </strong>$row[1]</td>
+              <td><strong>Tên: </strong> $row[2] <br> <strong>SĐT: </strong>$row[3]<br><strong>Địa chỉ: </strong>$row[4] <br> <strong>CMND: </strong>$row[1]</td>
               <td><strong>Tên phòng: </strong>$row[14] <br>
               <strong>Giá: </strong><span class='price'> $row[18]</span> </td>
               <td><strong>Ngày đến: </strong>$ngayden<br>
               <strong>Ngày đi: </strong>$ngaydi<br><hr style='background-color: #808080; height: 1px; border: 0;'>
               <strong>Tổng tiền: </strong><span class='price'>$row[8]</span><br></td>";
-              
+
 
 
               if ($row[11]==1) {
@@ -286,7 +286,7 @@ input:checked + .slider:before {
               class='btn btn-success btn-sm' onclick='Goi()' data-toggle='tooltip' title='Gọi khách hàng'> <span
               class='glyphicon glyphicon-earphone'></span> Gọi khách hàng
               </a></td>";
-             
+
               echo "
               <td>
               <div>
@@ -299,9 +299,9 @@ input:checked + .slider:before {
               <div>
               <a href='inputGhiChu.php?id=$row[0]'
               class='btn btn-warning btn-sm' data-toggle='tooltip' title='Thêm ghi chú'> <span
-              class='fa fa-sticky-note'></span>Thêm ghi chú 
+              class='fa fa-sticky-note'></span>Thêm ghi chú
               </a></div>";
-              
+
               echo "</td></tr>";
             }
             ?>
