@@ -1,5 +1,7 @@
 <?php
 include("connection.php");
+include("checklogin.php");
+CheckLogin();
 $id =  mysqli_real_escape_string($conn, $_REQUEST['id']);
 $note = mysqli_real_escape_string($conn, $_REQUEST['note']);
 $sql = "update orders set Note='$note' where ID='$id'";

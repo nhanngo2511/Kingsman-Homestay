@@ -1,5 +1,7 @@
 <?php
 include("connection.php");
+include("checklogin.php");
+CheckLogin();
    $id = mysqli_real_escape_string($conn, $_REQUEST['id']);
    $cmnn = mysqli_real_escape_string($conn, $_REQUEST['cmnn']);
    $hoten = mysqli_real_escape_string($conn, $_REQUEST['hoten']);

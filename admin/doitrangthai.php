@@ -1,5 +1,7 @@
 <?php
 include("connection.php");
+include("checklogin.php");
+CheckLogin();
 $id = @$_GET['id'];
 $sql = "select Status,RoomID from orders where ID=$id";
 $kq = mysqli_query($conn, $sql);

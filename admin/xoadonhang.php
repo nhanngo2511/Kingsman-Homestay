@@ -1,5 +1,7 @@
 <?php
 include("connection.php");
+include("checklogin.php");
+CheckLogin();
 $id = @$_GET['id'];
 $sql = "update orders set Status='4' where ID=$id";
     if(mysqli_query($conn, $sql)){

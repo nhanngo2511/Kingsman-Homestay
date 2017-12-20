@@ -255,102 +255,127 @@
           <img class="spin" src="admin/images/logo.png" style="width: 130px">
         </div>
         <div class="col-sm-2">
-           <h6>Kingsman Homestay</h6>
-          <ul>
-            <li><a href="#">Trang chủ</a></li>
-            <li><a href="introduce.php">Giới thiệu</a></li>
-            <li><a href="contact.php">Liên hệ</a></li>
-          </ul>
-        </div>
-        <div class="col-sm-4">
-          <div id="googleMap" style="width:100%;height:100%;"></div>
+         <h6>Kingsman Homestay</h6>
+         <ul>
+          <li><a href="#">Trang chủ</a></li>
+          <li><a href="introduce.php">Giới thiệu</a></li>
+          <li><a href="contact.php">Liên hệ</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-4">
+        <div id="googleMap" style="width:100%;height:100%;"></div>
 
+      </div>
+
+      <div class="col-sm-3">
+        <div class="social-networks">
+          <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+          <a href="#" class="google"><i class="fa fa-google-plus"></i></a>
         </div>
 
-        <div class="col-sm-3">
-          <div class="social-networks">
-            <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
-            <a href="#" class="google"><i class="fa fa-google-plus"></i></a>
-          </div>
-
-        </div>
       </div>
     </div>
-    <div class="footer-copyright">
-      <p>© 2016 Copyright Text </p>
-    </div>
-  </footer>
+  </div>
+  <div class="footer-copyright">
+    <p>© 2016 Copyright Text </p>
+  </div>
+</footer>
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/popper/popper.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/popper/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-  <!-- datepicker -->
-  <script src="vendor/bootstrap/js/bootstrap-datepicker.js"></script>
+<!-- datepicker -->
+<script src="vendor/bootstrap/js/bootstrap-datepicker.js"></script>
 
 
-  <script type="text/javascript">
+<script type="text/javascript">
 
-    function myMap() {
-      var mapProp= {
-        center:new google.maps.LatLng(10.762996, 106.693339),
-        zoom:15,
+  $('#datestart').attr('min', GetCurrentDate());
 
-      };
-      var mapPin = " http://www.google.com/mapfiles/marker.png";
-      var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-      var Marker = new google.maps.Marker({
-       map: map,
-       position: map.getCenter()
-     });
+  $('#dateend').attr('min', GetCurrentDate());
+
+
+  function GetCurrentDate(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+      dd = '0'+dd;
+    } 
+
+    if(mm<10) {
+      mm = '0'+mm;
     }
+    today = yyyy + '-' + mm + '-' + dd;
 
-    function ValidationDate(datestart, dateend) {
-     if (datestart > dateend) {
-      alert("Chọn ngày không hợp lệ.");
-      $('#dateend').val("");
-    }
-
+    return today;
   }
 
-  $('#datestart').bind('change', function() {
-    var datestart = $('#datestart').val();
-    var dateend = $('#dateend').val();
+
+
+  function myMap() {
+    var mapProp= {
+      center:new google.maps.LatLng(10.762996, 106.693339),
+      zoom:15,
+
+    };
+    var mapPin = " http://www.google.com/mapfiles/marker.png";
+    var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    var Marker = new google.maps.Marker({
+     map: map,
+     position: map.getCenter()
+   });
+  }
+
+  function ValidationDate(datestart, dateend) {
+   if (datestart > dateend) {
+    alert("Chọn ngày không hợp lệ.");
+    $('#dateend').val("");
+  }
+
+}
+
+$('#datestart').bind('change', function() {
+  var datestart = $('#datestart').val();
+  var dateend = $('#dateend').val();
 
 
 
-    if (datestart != "" && dateend != "") {
-      ValidationDate(datestart, dateend);          
-    }
+  if (datestart != "" && dateend != "") {
+    ValidationDate(datestart, dateend);          
+  }
 
 
-  });
+});
 
-  $('#dateend').bind('change', function() {
-    var datestart = $('#datestart').val();
-    var dateend = $('#dateend').val();
+$('#dateend').bind('change', function() {
+  var datestart = $('#datestart').val();
+  var dateend = $('#dateend').val();
 
-    if (datestart != "" && dateend != "") {
-      ValidationDate(datestart, dateend);
-    }
+  if (datestart != "" && dateend != "") {
+    ValidationDate(datestart, dateend);
+  }
 
-  });
+});
 
-  $('.price').each(function( index ) {
+$('.price').each(function( index ) {
 
-    var priceR = parseInt($(this).text()).toString();;
+  var priceR = parseInt($(this).text()).toString();;
 
-    var formatprice = FormatNumber(priceR) + ' VNĐ/Ngày';
+  var formatprice = FormatNumber(priceR) + ' VNĐ/Ngày';
 
-    $(this).text(formatprice);
+  $(this).text(formatprice);
 
-  });
+});
 
 
 
-  var price = $('#price').val();
-  $('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ / Ngày');
+var price = $('#price').val();
+$('#preview-price').html(' ' + FormatNumber(price) + ' VNĐ / Ngày');
 
 
       // $('#datestart').datepicker();

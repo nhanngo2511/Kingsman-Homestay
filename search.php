@@ -39,19 +39,11 @@
   include("session_datechecking.php");
   DateCheckingSession();
 
-  // if (!empty($_SESSION["datechecking"])) {
-  //   // $checkindate = $_SESSION["datechecking"]["checkindate"];
-  //   // $checkoutdate = $_SESSION["datechecking"]["checkoutdate"];
-
-  //   // echo  $checkindate ;
-  //    echo  "OK" ;
-  // }
-
-
 
   $currentURL = $_SERVER["REQUEST_URI"];
-  $currentURL = strstr($currentURL,"&p=",true);
+  //$currentURL = strstr($currentURL,"&p=",true);
 
+  // echo $currentURL;
 
   $category = @$_GET["category"];
 
@@ -103,9 +95,14 @@
   if ($checkoutdate == null || $checkindate == null) {
     $lenhtotalrows = "SELECT COUNT(rooms.ID) AS rows
     FROM rooms JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS images ON rooms.ID = images.RoomID 
-    JOIN (SELECT DISTINCT orders.RoomID 
-    FROM orders
+    LEFT JOIN (
+    SELECT orders.RoomID 
+    FROM orders 
+    WHERE (\"$formatcheckindate\" BETWEEN orders.CheckInDate AND orders.CheckOutDate) OR 
+    (\"$formatcheckoutdate\" BETWEEN orders.CheckInDate AND orders.CheckOutDate)
+    ) AS o ON rooms.ID = o.RoomID
     WHERE rooms.Status = 1 AND 
+    o.RoomID IS NULL AND
     rooms.NumberOfPeople >= " .$members." AND
     rooms.CategoryID like \"%$category%\" AND 
     rooms.Price >= " .$price;
@@ -121,11 +118,14 @@
 
   $lenh1 = "SELECT rooms.ID, rooms.Name, rooms.Description, rooms.Price, images.Name AS ImageName 
   FROM rooms JOIN (SELECT name, RoomID FROM images GROUP by RoomID) AS images ON rooms.ID = images.RoomID 
-  JOIN (SELECT DISTINCT orders.RoomID 
-  FROM orders
-  WHERE ((\"$formatcheckindate\" < orders.CheckInDate AND \"$formatcheckoutdate\" < orders.CheckInDate) OR (\"$formatcheckindate\" > orders.CheckOutDate AND \"$formatcheckoutdate\" > orders.CheckOutDate))
-  ) AS orders ON rooms.ID = orders.RoomID
+  LEFT JOIN (
+  SELECT orders.RoomID 
+  FROM orders 
+  WHERE (\"$formatcheckindate\" BETWEEN orders.CheckInDate AND orders.CheckOutDate) OR 
+  (\"$formatcheckoutdate\" BETWEEN orders.CheckInDate AND orders.CheckOutDate)
+  ) AS o ON rooms.ID = o.RoomID
   WHERE rooms.Status = 1 AND 
+  o.RoomID IS NULL AND
   rooms.NumberOfPeople >= " .$members." AND
   rooms.CategoryID like \"%$category%\" AND 
   rooms.Price >= " .$price."
@@ -143,10 +143,6 @@
    ORDER BY rooms.Price limit ".$x.",".$sodong;
    
  }
-
-
-
-
 
 
 
@@ -385,6 +381,29 @@
 
 
 <script type="text/javascript">
+
+    $('#datestart').attr('min', GetCurrentDate());
+
+  $('#dateend').attr('min', GetCurrentDate());
+
+
+  function GetCurrentDate(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+      dd = '0'+dd;
+    } 
+
+    if(mm<10) {
+      mm = '0'+mm;
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+
+    return today;
+  }
 
   function myMap() {
     var mapProp= {

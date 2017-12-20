@@ -1,5 +1,7 @@
 <?php
 include("connection.php");
+include("checklogin.php");
+CheckLogin();
 $lenh = "select * from orders";
 $kq = mysqli_query($conn,$lenh);
 $tongsodong = mysqli_num_rows($kq);
@@ -245,8 +247,8 @@ input:checked + .slider:before {
             <?php
             while($row = mysqli_fetch_row($kq1))
             {
-              $ngaydi = date("d-m-Y", strtotime($row[6]));
-              $ngayden = date("d-m-Y", strtotime($row[7]));
+              $ngaydi = date("d-m-Y", strtotime($row[7]));
+              $ngayden = date("d-m-Y", strtotime($row[6]));
               $ngaytao = date("d-m-Y", strtotime($row[12]));
               echo "<tr style='height:150px'>
               <td><strong>ID: </strong>$row[0]<hr style='background-color: #808080; height: 1px; border: 0;'><strong>Ngày tạo: </strong>$ngaytao<hr style='background-color: #808080; height: 1px; border: 0;'><strong>Ghi chú: </strong>$row[9]";
