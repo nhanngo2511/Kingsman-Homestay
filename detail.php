@@ -182,11 +182,11 @@
           <input id="roomID" type="hidden" name="roomID" value="<?php echo $row[0]; ?>">
 
           <label for="">Ngày đến:</label>
-          <input required id="datestart" type="date" class="form-control" id="" name="checkindate" value="<?php echo $checkindate; ?>">
+          <input required id="datestart" type="date" class="form-control" id="" name="checkindate" value="<?php echo @$checkindate; ?>">
 
 
           <label for="">Ngày đi:</label>
-          <input required id="dateend" type="date" class="form-control" id="" name="checkoutdate" value="<?php echo $checkoutdate; ?>">
+          <input required id="dateend" type="date" class="form-control" id="" name="checkoutdate" value="<?php echo @$checkoutdate; ?>">
 
           <label id="checkduplicatedate-message" style="color:red; display: none;">Đã có người đăng ký trong khoảng thời gian này rồi, Vui lòng chọn khoảng thời gian khác.</label>
 
@@ -341,15 +341,18 @@
 
       },
       success: function(response) {
-        if (response.isExist) {
+      
+         if (response.isExist) {
 
           $('#checkduplicatedate-message').css('display','inline');
           $('#dateend').val("");
           $('#hiddentotal').val(0);
           $('#total').text("");
-        }else{
-          $('#checkduplicatedate-message').css('display','none');
-        }
+
+          
+         }else{
+           $('#checkduplicatedate-message').css('display','none');
+         }
       }
     });
 

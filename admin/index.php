@@ -279,7 +279,7 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
 
             var score = {
                 years: ['January', 'February', 'March', 'April', 'May', 'June','July', 'August','September','Octorber', 'November', 'December'],
-                total:[data[0].January, data[0].February, data[0].March, data[0].April,data[0]. May, data[0].June,data[0].July, data[0].August,data[0].September,data[0].Octorber, data[0].November, data[0].December]
+                total:[data[0].January, data[0].Febuary, data[0].March, data[0].April,data[0]. May, data[0].June,data[0].July, data[0].August,data[0].September,data[0].Octorber, data[0].November, data[0].December]
             };
             var datalength = data.length;
 
