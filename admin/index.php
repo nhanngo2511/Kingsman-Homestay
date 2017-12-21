@@ -48,6 +48,8 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
     <!-- Custom Fonts -->
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" ></script>
+
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -72,7 +74,7 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php">King Man Homestay</a>
+                <a class="navbar-brand" href="index.php">Kingsman Homestay</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -208,87 +210,251 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
             </div>
             <div class="row">
                 <div class="col-lg-12 col-md-6">
-                    <canvas id="line-chartcanvas"></canvas>
+                    <div class="col-lg-4 col-md-6">
+                    <label for="sel2">Chọn năm:</label>
+                    <select class="form-control" id="sel2" name="year">
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                    </select>
+
+                </div>
+                <canvas id="line-chartcanvas2"></canvas>
                 </div>
             </div>
+            <hr>
+            <div class="row">
+                <div class="col-lg-12 col-md-6">
+                 <canvas id="line-chartcanvas"></canvas>
+            </div>
         </div>
-        
-        <!-- /#page-wrapper -->
-
     </div>
-    <!-- /#wrapper -->
 
-    <!-- jQuery -->
-    <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- /#page-wrapper -->
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+</div>
+<!-- /#wrapper -->
 
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="vendor/metisMenu/metisMenu.min.js"></script>
+<!-- jQuery -->
+<script src="vendor/jquery/jquery.min.js"></script>
 
-    <!-- Morris Charts JavaScript -->
-    <script src="vendor/raphael/raphael.min.js"></script>
-    <script src="vendor/morrisjs/morris.min.js"></script>
-    <script src="data/morris-data.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" ></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-    <!-- Custom Theme JavaScript -->
-    <script src="dist/js/sb-admin-2.js"></script>
-    <script src="https://codepen.io/anon/pen/aWapBE.js"></script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="vendor/metisMenu/metisMenu.min.js"></script>
 
-    <script>
-
-        roomchart();
-
-        function roomchart() {
-            $.ajax({
-              url: 'getcountroombyorder.php',
-              type: 'GET',
-              dataType: 'json',
-
-              success: function(data) {
+<!-- Morris Charts JavaScript -->
+<script src="vendor/raphael/raphael.min.js"></script>
+<script src="vendor/morrisjs/morris.min.js"></script>
+<script src="data/morris-data.js"></script>
 
 
-                var score = {
-                    roomname: [],
-                    roomcount:[]
-                };
+<!-- Custom Theme JavaScript -->
+<script src="dist/js/sb-admin-2.js"></script>
+<script src="https://codepen.io/anon/pen/aWapBE.js"></script>
 
-                var datalength = data.length;
+<script>
 
-                for (var i = 0; i < datalength; i++) {
-                    score.roomname.push(data[i].Name);
-                    score.roomcount.push(data[i].roomcount);
-                }
+    var year = $('#sel2').val();
+    orderchart(year);
+    roomchart();
 
-                var char = new Chart($('#line-chartcanvas'), {
-                    type:'bar',
-                    data:{
-                        labels: score.roomname,
-                        datasets:[{
-                            label:'lượng đặt phòng',
-                            data:score.roomcount,
-                            backgroundColor: palette('tol',datalength).map(function(hex) {
-                                return '#' + hex;
-                            }
-                            )
-                        }]
-                    },
-                    option:{
+    $('#sel2').change(function(event) {
+        orderchart();
+    });
 
-                       legend:{
-                        display:false
-                    }    
-                }
+    function orderchart(year) {
 
-            });
+        year = $('#sel2').val();
 
+        $.ajax({
+          url: 'getstatisticsordertotal.php?year=' + year,
+          type: 'GET',
+          dataType: 'json',
+
+          success: function(data) {
+
+            var score = {
+                years: ['January', 'February', 'March', 'April', 'May', 'June','July', 'August','September','Octorber', 'November', 'December'],
+                total:[data[0].January, data[0].February, data[0].March, data[0].April,data[0]. May, data[0].June,data[0].July, data[0].August,data[0].September,data[0].Octorber, data[0].November, data[0].December]
+            };
+            var datalength = data.length;
+
+            var char = new Chart($('#line-chartcanvas2'), {
+                type:'line',
+                data:{
+                    labels: score.years,
+                    datasets:[{
+                        label:'',
+                        data:score.total,
+                        backgroundColor:'rgba(0,255,0,0.5)'
+                    }]
+                },
+                options:{
+                   title:{
+                    text:'Tổng doanh thu trong năm ' + year + ' là: ' + FormatNumber(data[0].total_yearly) + ' VND',
+                    display:true,
+                    fontColor:'#666',
+                    fontSize:30
+                },
+                legend:{
+                    display:false
+                },
+                scales: {
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+                            // OR //
+                            beginAtZero: true   // minimum value will be 0.
             }
-        });
+        }]
+    }
+
+
+}
+
+});
 
         }
-    </script>
+    });
+
+    }
+
+    function roomchart() {
+        $.ajax({
+          url: 'getstatisticsroom.php',
+          type: 'GET',
+          dataType: 'json',
+
+          success: function(data) {
+
+
+            var score = {
+                roomname: [],
+                roomcount:[]
+            };
+
+            var datalength = data.length;
+
+            for (var i = 0; i < datalength; i++) {
+                score.roomname.push(data[i].Name);
+                score.roomcount.push(data[i].roomcount);
+            }
+
+            var char = new Chart($('#line-chartcanvas'), {
+                type:'bar',
+                data:{
+                    labels: score.roomname,
+                    datasets:[{
+                        label:'Thống kê số lượng phòng đã được đặt',
+                        data:score.roomcount,
+                        backgroundColor: palette('tol',datalength).map(function(hex) {
+                            return '#' + hex;
+                        }
+                        )
+                    }]
+                },
+                options:{
+                   title:{
+                    text:'Thống kê số lượng phòng đã được đặt',
+                    display:true,
+                    fontColor:'#666',
+                    fontSize:30
+                },
+                legend:{
+                    display:false
+                },
+                scales: {
+                    yAxes: [
+                    {
+                        ticks: {
+                                    min: 0, // it is for ignoring negative step.
+                                    beginAtZero: true,
+                                    stepSize: 1  // if i use this it always set it '1', which look very awkward if it have high value  e.g. '100'.
+                                }
+                            }
+                            ]
+                        }    
+                    }
+
+                });
+
+        }
+    });
+
+    }
+
+    function FormatNumber(str) {
+  var strTemp = GetNumber(str);
+  if (strTemp.length <= 3)
+    return strTemp;
+  strResult = "";
+  for (var i = 0; i < strTemp.length; i++)
+    strTemp = strTemp.replace(",", "");
+  var m = strTemp.lastIndexOf(".");
+  if (m == -1) {
+    for (var i = strTemp.length; i >= 0; i--) {
+      if (strResult.length > 0 && (strTemp.length - i - 1) % 3 == 0)
+        strResult = "," + strResult;
+      strResult = strTemp.substring(i, i + 1) + strResult;
+    }
+  } else {
+    var strphannguyen = strTemp.substring(0, strTemp.lastIndexOf("."));
+    var strphanthapphan = strTemp.substring(strTemp.lastIndexOf("."),
+      strTemp.length);
+    var tam = 0;
+    for (var i = strphannguyen.length; i >= 0; i--) {
+
+      if (strResult.length > 0 && tam == 4) {
+        strResult = "," + strResult;
+        tam = 1;
+      }
+
+      strResult = strphannguyen.substring(i, i + 1) + strResult;
+      tam = tam + 1;
+    }
+    strResult = strResult + strphanthapphan;
+  }
+  return strResult;
+}
+
+function GetNumber(str) {
+  var count = 0;
+  for (var i = 0; i < str.length; i++) {
+    var temp = str.substring(i, i + 1);
+    if (!(temp == "," || temp == "." || (temp >= 0 && temp <= 9))) {
+      alert(inputnumber);
+      return str.substring(0, i);
+    }
+    if (temp == " ")
+      return str.substring(0, i);
+    if (temp == ".") {
+      if (count > 0)
+        return str.substring(0, ipubl_date);
+      count++;
+    }
+  }
+  return str;
+}
+
+function IsNumberInt(str) {
+  for (var i = 0; i < str.length; i++) {
+    var temp = str.substring(i, i + 1);
+    if (!(temp == "." || (temp >= 0 && temp <= 9))) {
+      alert(inputnumber);
+      return str.substring(0, i);
+    }
+    if (temp == ",") {
+      return str.substring(0, i);
+    }
+  }
+  return str;
+}
+</script>
 
 </body>
 
