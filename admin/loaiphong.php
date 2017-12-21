@@ -92,7 +92,7 @@ $kq = mysqli_query($conn,$lenh);
                             <a href="phong.php"><i class="fa fa-home fa-fw"></i> Phòng</a>
                         </li>
                         <li>
-                            <a href="donhang.php"><i class="fa fa-list-alt fa-fw"></i> Đơn hàng</a>
+                            <a href="donhang.php"><i class="fa fa-list-alt fa-fw"></i> Đơn đặt phòng</a>
                         </li>
 
                     </ul>

@@ -22,7 +22,7 @@ $kq1 = mysqli_query($conn,$lenh1);
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
-  <title>Admin | Quản lý đơn hàng</title>
+  <title>Admin | Quản lý đơn đặt phòng</title>
   <meta name="author" content="">
   <script>
     $(document).ready(function(){
@@ -39,7 +39,7 @@ $kq1 = mysqli_query($conn,$lenh1);
     }
     function Xoa()
     {
-      var strconfirm = confirm("Bạn có muốn huỷ đơn hàng này không?");
+      var strconfirm = confirm("Bạn có muốn huỷ đơn đặt phòng này không?");
       if (strconfirm == true) {
         return true;
       }
@@ -202,7 +202,7 @@ input:checked + .slider:before {
                   <a href="phong.php"><i class="fa fa-home fa-fw"></i> Phòng</a>
                 </li>
                 <li>
-                  <a href="donhang.php" class="active"><i class="fa fa-list-alt fa-fw"></i> Đơn hàng</a>
+                  <a href="donhang.php" class="active"><i class="fa fa-list-alt fa-fw"></i> Đơn đặt phòng</a>
                 </li>
 
               </ul>
@@ -215,28 +215,32 @@ input:checked + .slider:before {
         <div id="page-wrapper">
          <div class="row">
            <div class="col-lg-12">
-            <h1 class="page-header">Quản lý đơn hàng</h1>
+            <h1 class="page-header">Quản lý đơn đặt phòng</h1>
             <ol class="breadcrumb">
              <li><i class="fa fa-tasks"></i> Quản lý</li>
-             <li class="active"><a href="donhang.php"><i class="fa fa-list-alt"></i> Đơn hàng</a></li>
+             <li class="active"><a href="donhang.php"><i class="fa fa-list-alt"></i> Đơn đặt phòng</a></li>
            </ol>
          </div>
 
        </div>
        <div class="row">
         <div class="col-lg-5">
+          
+        </style>
           <a href='themdonhang.php'
-          class='btn btn-success   btn-sm'> <span
-          class='glyphicon glyphicon-plus'></span> Thêm mới
+          class='btn btn-success btn-sm'> <span
+          class='glyphicon glyphicon-plus'></span> Đặt phòng tại Kingsman / Thêm đơn đặt phòng
         </a>
       </div>
+
     </div>
+    <br>
     <div >
       <div class="table-responsive">
         <table class="table table-hover table-striped">
           <tbody>
             <tr>
-              <th>Đơn hàng</th>
+              <th>Đơn đặt phòng</th>
               <th>Khách hàng</th>
               <th>Phòng</th>
               <th style="width: 200">Thu tiền</th>
@@ -254,8 +258,8 @@ input:checked + .slider:before {
               <td><strong>ID: </strong>$row[0]<hr style='background-color: #808080; height: 1px; border: 0;'><strong>Ngày tạo: </strong>$ngaytao<hr style='background-color: #808080; height: 1px; border: 0;'><strong>Ghi chú: </strong>$row[9]";
               if ($row[11]==1) {
                 echo "<hr style='background-color: #808080; height: 1px; border: 0;'>  <a href='xoadonhang.php?id=$row[0]'
-                class='btn btn-danger btn-sm' id='xoa' onclick='Xoa()' data-toggle='tooltip' title='Huỷ đơn hàng'><span
-                class='glyphicon glyphicon-remove-circle'></span> Hủy đơn hàng
+                class='btn btn-danger btn-sm' id='xoa' onclick='Xoa()' data-toggle='tooltip' title='Huỷ đơn đặt phòng'><span
+                class='glyphicon glyphicon-remove-circle'></span> Hủy đơn đặt phòng
                 </a>
 
                 ";
@@ -293,8 +297,8 @@ input:checked + .slider:before {
               <td>
               <div>
               <a href='suadonhang.php?id=$row[0]'
-              class='btn btn-default btn-sm' data-toggle='tooltip' title='Sửa đơn hàng'> <span
-              class='glyphicon glyphicon-edit'></span> Sửa đơn hàng
+              class='btn btn-default btn-sm' data-toggle='tooltip' title='Sửa đơn đặt phòng'> <span
+              class='glyphicon glyphicon-edit'></span> Sửa đơn đặt phòng
               </a>
               </div>
               <br>

@@ -122,7 +122,7 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
                             <a href="phong.php"><i class="fa fa-home fa-fw"></i> Phòng</a>
                         </li>
                         <li>
-                            <a href="donhang.php"><i class="fa fa-list-alt fa-fw"></i> Đơn hàng</a>
+                            <a href="donhang.php"><i class="fa fa-list-alt fa-fw"></i> Đơn đặt phòng</a>
                         </li>
 
                     </ul>
@@ -194,7 +194,7 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="huge"><?php echo $Ndonhang; ?></div>
-                                    <div>Đơn Hàng</div>
+                                    <div>Đơn đặt phòng</div>
                                 </div>
                             </div>
                         </div>
