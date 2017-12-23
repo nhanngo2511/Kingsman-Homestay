@@ -50,10 +50,12 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" ></script>
 
+    <style type="text/css" media="screen">
+    
+</style>
 
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -62,7 +64,7 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
 </head>
 
 <body>
-
+    <link rel = "stylesheet" href = "styles.css">
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -211,52 +213,52 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
             <div class="row">
                 <div class="col-lg-12 col-md-6">
                     <div class="col-lg-4 col-md-6">
-                    <label for="sel2">Chọn năm:</label>
-                    <select class="form-control" id="sel2" name="year">
-                        <option value="2017">2017</option>
-                        <option value="2018">2018</option>
-                        <option value="2019">2019</option>
-                        <option value="2020">2020</option>
-                        <option value="2021">2021</option>
-                    </select>
+                        <label for="sel2">Chọn năm:</label>
+                        <select class="form-control" id="sel2" name="year">
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                        </select>
 
-                </div>
-                <canvas id="line-chartcanvas2"></canvas>
+                    </div>
+                    <canvas id="line-chartcanvas2"></canvas>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="col-lg-12 col-md-6">
                  <canvas id="line-chartcanvas"></canvas>
-            </div>
-        </div>
-    </div>
+             </div>
+         </div>
+     </div>
 
-    <!-- /#page-wrapper -->
+     <!-- /#page-wrapper -->
 
-</div>
-<!-- /#wrapper -->
+ </div>
+ <!-- /#wrapper -->
 
-<!-- jQuery -->
-<script src="vendor/jquery/jquery.min.js"></script>
+ <!-- jQuery -->
+ <script src="vendor/jquery/jquery.min.js"></script>
 
-<!-- Bootstrap Core JavaScript -->
-<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+ <!-- Bootstrap Core JavaScript -->
+ <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-<!-- Metis Menu Plugin JavaScript -->
-<script src="vendor/metisMenu/metisMenu.min.js"></script>
+ <!-- Metis Menu Plugin JavaScript -->
+ <script src="vendor/metisMenu/metisMenu.min.js"></script>
 
-<!-- Morris Charts JavaScript -->
-<script src="vendor/raphael/raphael.min.js"></script>
-<script src="vendor/morrisjs/morris.min.js"></script>
-<script src="data/morris-data.js"></script>
+ <!-- Morris Charts JavaScript -->
+ <script src="vendor/raphael/raphael.min.js"></script>
+ <script src="vendor/morrisjs/morris.min.js"></script>
+ <script src="data/morris-data.js"></script>
 
 
-<!-- Custom Theme JavaScript -->
-<script src="dist/js/sb-admin-2.js"></script>
-<script src="https://codepen.io/anon/pen/aWapBE.js"></script>
+ <!-- Custom Theme JavaScript -->
+ <script src="dist/js/sb-admin-2.js"></script>
+ <script src="https://codepen.io/anon/pen/aWapBE.js"></script>
 
-<script>
+ <script>
 
     var year = $('#sel2').val();
     orderchart(year);
@@ -310,14 +312,14 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
                             suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
                             // OR //
                             beginAtZero: true   // minimum value will be 0.
+                        }
+                    }]
+                }
+
+
             }
-        }]
-    }
 
-
-}
-
-});
+        });
 
         }
     });
@@ -389,20 +391,20 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
     }
 
     function FormatNumber(str) {
-  var strTemp = GetNumber(str);
-  if (strTemp.length <= 3)
-    return strTemp;
-  strResult = "";
-  for (var i = 0; i < strTemp.length; i++)
-    strTemp = strTemp.replace(",", "");
-  var m = strTemp.lastIndexOf(".");
-  if (m == -1) {
-    for (var i = strTemp.length; i >= 0; i--) {
-      if (strResult.length > 0 && (strTemp.length - i - 1) % 3 == 0)
-        strResult = "," + strResult;
-      strResult = strTemp.substring(i, i + 1) + strResult;
+      var strTemp = GetNumber(str);
+      if (strTemp.length <= 3)
+        return strTemp;
+    strResult = "";
+    for (var i = 0; i < strTemp.length; i++)
+        strTemp = strTemp.replace(",", "");
+    var m = strTemp.lastIndexOf(".");
+    if (m == -1) {
+        for (var i = strTemp.length; i >= 0; i--) {
+          if (strResult.length > 0 && (strTemp.length - i - 1) % 3 == 0)
+            strResult = "," + strResult;
+        strResult = strTemp.substring(i, i + 1) + strResult;
     }
-  } else {
+} else {
     var strphannguyen = strTemp.substring(0, strTemp.lastIndexOf("."));
     var strphanthapphan = strTemp.substring(strTemp.lastIndexOf("."),
       strTemp.length);
@@ -412,14 +414,14 @@ $Ndonhang= mysqli_num_rows($kqdonhang);
       if (strResult.length > 0 && tam == 4) {
         strResult = "," + strResult;
         tam = 1;
-      }
-
-      strResult = strphannguyen.substring(i, i + 1) + strResult;
-      tam = tam + 1;
     }
-    strResult = strResult + strphanthapphan;
-  }
-  return strResult;
+
+    strResult = strphannguyen.substring(i, i + 1) + strResult;
+    tam = tam + 1;
+}
+strResult = strResult + strphanthapphan;
+}
+return strResult;
 }
 
 function GetNumber(str) {
@@ -429,16 +431,16 @@ function GetNumber(str) {
     if (!(temp == "," || temp == "." || (temp >= 0 && temp <= 9))) {
       alert(inputnumber);
       return str.substring(0, i);
-    }
-    if (temp == " ")
+  }
+  if (temp == " ")
       return str.substring(0, i);
-    if (temp == ".") {
+  if (temp == ".") {
       if (count > 0)
         return str.substring(0, ipubl_date);
-      count++;
-    }
-  }
-  return str;
+    count++;
+}
+}
+return str;
 }
 
 function IsNumberInt(str) {
@@ -447,12 +449,12 @@ function IsNumberInt(str) {
     if (!(temp == "." || (temp >= 0 && temp <= 9))) {
       alert(inputnumber);
       return str.substring(0, i);
-    }
-    if (temp == ",") {
-      return str.substring(0, i);
-    }
   }
-  return str;
+  if (temp == ",") {
+      return str.substring(0, i);
+  }
+}
+return str;
 }
 </script>
 
